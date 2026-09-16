@@ -1,0 +1,13 @@
+"","bw_kg","adg_g_day","milk_prod_kg_d","NDF_nutrition","ADF_nutrition","CP_nutrition","Ash_nutrition","EE_nutrition","NDF_digest","ADL_nutrition","DM_digest","OM_digest"
+"bw_kg",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"adg_g_day",0.62,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"milk_prod_kg_d",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"NDF_nutrition",-0.17,-0.07,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"ADF_nutrition",0.2,0.1,NA,0.4,NA,NA,NA,NA,NA,NA,NA,NA
+"CP_nutrition",0.1,-0.06,NA,-0.24,-0.37,NA,NA,NA,NA,NA,NA,NA
+"Ash_nutrition",-0.24,-0.18,NA,0.03,0,-0.51,NA,NA,NA,NA,NA,NA
+"EE_nutrition",-0.15,-0.09,NA,-0.29,0.49,0.19,-0.19,NA,NA,NA,NA,NA
+"NDF_digest",0.96,1,NA,-0.52,NA,1,-0.68,-1,NA,NA,NA,NA
+"ADL_nutrition",-0.57,-0.82,NA,0.38,NA,0.05,0.5,0.82,-0.91,NA,NA,NA
+"DM_digest",0.99,0.98,NA,-0.64,NA,0.98,-0.56,-1,0.99,-0.84,NA,NA
+"OM_digest",0.07,0.68,NA,-0.72,0.23,0.21,-0.25,0.51,NA,NA,NA,NA
