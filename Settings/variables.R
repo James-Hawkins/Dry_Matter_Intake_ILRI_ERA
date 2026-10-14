@@ -45,7 +45,7 @@ mod.tier.1 <<- c(1:3)
 mod.tier.2 <<- c(4:6)
 mod.tier.3 <<- c(7:9)
 
-tier.label.1 <<- 'Animal' ;   tier.label.2 <<- 'Animal +\nNutrition'  ;   tier.label.3 <<- 'Animal +\nNutrition ext.'
+tier.label.1 <<- 'Animal only\n' ;   tier.label.2 <<- 'Animal + Diet\nchemical comp.'  ;   tier.label.3 <<- 'Animal + Diet\nchem. + digest.'
 
 
 pred.var.BW <<-   'bw_kg'

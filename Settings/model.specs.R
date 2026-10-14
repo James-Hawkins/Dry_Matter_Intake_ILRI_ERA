@@ -67,7 +67,7 @@ include.redf <<- FALSE # Include re-defined variables such as NDF x NDF digestib
 n.folds <<- 3 # number of folds 
 min.e.units <<- round ( n.folds * 1.0 , 0 ) # By default, the minimum number of experimental units must be at least as great as number of folds
 n.mod.classes <<- 2 # number of model classes (e.g. GBR, mixed effects, ...)
-n.mod.form <<- 6 # Number of formulae per model class (note: this should be a multiple of 3, i.e. 3, 6, or 9)
+n.mod.form <<- 9 # Number of formulae per model class (note: this should be a multiple of 3, i.e. 3, 6, or 9)
 
 model.classes.all <<- seq( 1 , n.mod.classes )
 

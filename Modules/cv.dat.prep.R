@@ -3,6 +3,8 @@
 { 
   
   
+  # If NDF categories are merged into one, all values get collapsed into 'low' category
+if (  n.ndf == 1 ) { d.reg.in$ndf.level <- ndf.lev.lo }
   
 
 d.reg.in.min.vars <-  ( !is.na(d.reg.in$feed_intake_g_d) & !is.na(d.reg.in$bw_kg) &  !is.na(d.reg.in$adg_kg_day) &  !is.na(d.reg.in$Sample.size)  )
@@ -234,6 +236,9 @@ for (b in 1 :   n.breeds) {
   col.sexes <- rep ( c(rep( sex.levels[1]   , n.folds * n.ndf ) , rep( sex.levels[2]   , n.folds * n.ndf ))  , n.species * n.mod.vers * n.mod.form * n.breeds ) 
   col.breeds <- rep ( c(rep( breed.levels[1]  , n.folds * n.ndf * n.sexes ) , rep( breed.levels[2]   , n.folds * n.ndf * n.sexes  ))  , n.species * n.mod.vers * n.mod.form  ) 
   
+
+  # If merging NDF, default to just NDF == 'low'
+  if ( n.ndf == 1 ){  col.ndf <-   col.ndf[ which( col.ndf == ndf.lev.lo) ]  } 
   
   # If merging sexes, default to just sex == 1
   if ( merge.sexes ){ col.sexes <-  col.sexes[ which(col.sexes != 2) ]  } 

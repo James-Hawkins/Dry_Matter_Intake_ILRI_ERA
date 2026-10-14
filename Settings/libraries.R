@@ -28,7 +28,7 @@ library(ggcorrplot)
 library(reshape2)
 
 
-install.packages(c('car', 'usdm' , 'ggcorrplot' , 'reshape2'), type = "source")
+#install.packages(c('car', 'usdm' , 'ggcorrplot' , 'reshape2'), type = "source")
 
 # Non essential
 library("treemapify")

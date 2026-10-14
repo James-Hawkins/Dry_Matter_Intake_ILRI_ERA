@@ -69,12 +69,17 @@ print(' Creating validation plots ')
     theme(
       panel.grid.major = element_blank()
       ,panel.background = element_blank()
-      ,panel.border = element_rect(colour = "black", fill=NA, linewidth =1)
+      ,panel.border = element_rect(colour = "black", fill=NA, linewidth = 0.65)
       
-      ,strip.background = element_rect(color='black', fill='white', linewidth=1, linetype="solid")
-      ,strip.text.x = element_text(size =  7.0 , color = 'black' , face = "bold"  )
+      ,strip.background = element_rect(color='black', fill='white', linewidth= 0.65, linetype="solid")
+      ,strip.text.x = element_text(size =  7.0 , color = 'black' , face = "bold" 
+                                   
+                                 ,  margin = margin(t = 2.6, r = 2.6, b = 2.6, l = 2.6, unit = "pt"))
       
-      ,strip.text.y = element_text(size =  9.75 , color = 'black' , face = "bold" )
+      , strip.text.y = element_text(size =  9.75 , color = 'black' , face = "bold" 
+                                   
+                                    ,  margin = margin(t = 5, r = 5, b = 5, l = 5, unit = "pt"))  
+                                   
       
       , axis.text.x = element_text( angle = 90 , hjust = 1 , vjust = 0.5 , size = 8.5)
       , axis.text.y = element_text( hjust = 1 , vjust = 0.5 , size = 8.5)
@@ -82,7 +87,7 @@ print(' Creating validation plots ')
       , legend.background = element_rect(fill = "transparent", color = NA)
     ) 
   
-  gg.valid.pnt.size <<- 0.7
+  gg.valid.pnt.size <<- 0.62
   gg.valid.pnt.colr <<- 'black'
   
   gen.gg.valid <<- function( 
@@ -263,7 +268,6 @@ print(' Creating validation plots ')
   # Plot basic GBR model (model class = 1)
   
   # Bos indicus ( breed.indig )
-  model.class <- model.class.GBR
   breed <- breed.indig[1]
   
   sex <- sex.male[1] 
@@ -413,7 +417,6 @@ if ( model.class.ME %in% model.classes.all ){
 } # Data frame tabulation 
 
 
-
 {
   # GBR Model plots
   
@@ -422,30 +425,22 @@ if ( model.class.ME %in% model.classes.all ){
   # Male
   gg.gbr.y.valid.bv.lon.Bind.male.0.tier.1 <- try( gen.gg.valid( gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.1 ,]   ) , silent = TRUE)
   
-  # gg.gbr.y.valid.sp.lon.Bind.male.0.tier.1
   
   gg.gbr.y.valid.bv.lon.Bind.male.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.2,]), silent = TRUE)
   
-  # gg.gbr.y.valid.sp.lon.Bind.male.0.tier.2
   
-  gg.gbr.y.valid.bv.lon.Bind.male.0.tier.3 <- try(  gen.gg.valid(gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.2,] )   , silent = TRUE)
+  gg.gbr.y.valid.bv.lon.Bind.male.0.tier.3 <- try(  gen.gg.valid(gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.3,] )   , silent = TRUE)
   
-  # gg.gbr.y.valid.sp.lon.Bind.male.0.tier.3
   
   # Female
   if (  n.sexes == 2 ){
     
   gg.gbr.y.valid.bv.lon.Bind.female.0.tier.1 <- try( gen.gg.valid(  gg.d.reg.out.bv.lon.Bind.female.all[gg.d.reg.out.bv.lon.Bind.female.all$mod.tier == tier.label.1,] ) , silent = TRUE)
   
-  # gg.gbr.y.valid.bv.lon.Bind.female.0.tier.1
-  
   gg.gbr.y.valid.bv.lon.Bind.female.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Bind.female.all[gg.d.reg.out.bv.lon.Bind.female.all$mod.tier == tier.label.2,]) , silent = TRUE)
-  
-  # gg.gbr.y.valid.bv.lon.female.0.tier.2
   
   gg.gbr.y.valid.bv.lon.Bind.female.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Bind.female.all[gg.d.reg.out.bv.lon.Bind.female.all$mod.tier == tier.label.3,]  ) , silent = TRUE)
   
-  # gg.gbr.y.valid.bv.lon.Bind.female.0.tier.3
   
   }
   
@@ -453,30 +448,21 @@ if ( model.class.ME %in% model.classes.all ){
   # Male
   gg.gbr.y.valid.bv.hin.Bind.male.0.tier.1 <- try( gen.gg.valid(  gg.d.reg.out.bv.hin.Bind.male.all[gg.d.reg.out.bv.hin.Bind.male.all$mod.tier == tier.label.1,] ) , silent = TRUE)
   
-  # gg.gbr.y.valid.bv.hin.Bind.male.0.tier.1
-  
   gg.gbr.y.valid.bv.hin.Bind.male.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Bind.male.all[gg.d.reg.out.bv.hin.Bind.male.all$mod.tier == tier.label.2,]  ) , silent = TRUE)
   
-  # gg.gbr.y.valid.bv.hin.Bind.male.0.tier.2 
   
   gg.gbr.y.valid.bv.hin.Bind.male.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Bind.male.all[gg.d.reg.out.bv.hin.Bind.male.all$mod.tier == tier.label.3,]  ) , silent = TRUE)
   
-  # gg.gbr.y.valid.bv.hin.Bind.male.0.tier.3 
   
   # Female
   if (  n.sexes == 2  ){
     
     gg.gbr.y.valid.bv.hin.Bind.female.0.tier.1 <- try( gen.gg.valid(  gg.d.reg.out.bv.hin.Bind.female.all[gg.d.reg.out.bv.hin.Bind.female.all$mod.tier == tier.label.1,]  ) , silent = TRUE)
-    
-    # gg.gbr.y.valid.bv.hin.female.0.tier.1
-    
+  
     gg.gbr.y.valid.bv.hin.Bind.female.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Bind.female.all[gg.d.reg.out.bv.hin.Bind.female.all$mod.tier == tier.label.2,]  ) , silent = TRUE)
-    
-    # gg.gbr.y.valid.bv.hin.female.0.tier.2
     
     gg.gbr.y.valid.bv.hin.Bind.female.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Bind.female.all[gg.d.reg.out.bv.hin.Bind.female.all$mod.tier == tier.label.3,]) , silent = TRUE)
     
-    # gg.gbr.y.valid.bv.hin.female.0.tier.3
     
   }
   
@@ -486,31 +472,25 @@ if ( model.class.ME %in% model.classes.all ){
     # Cattle low NDF
     # Male
     gg.gbr.y.valid.bv.lon.Btau.male.0.tier.1 <- try( gen.gg.valid( gg.d.reg.out.bv.lon.Btau.male.all[gg.d.reg.out.bv.lon.Btau.male.all$mod.tier == tier.label.1  ,]   ) , silent = TRUE)
-    
-    # gg.gbr.y.valid.bv.lon.Btau.male.0.tier.1
+  
     
     gg.gbr.y.valid.bv.lon.Btau.male.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Btau.male.all[gg.d.reg.out.bv.lon.Btau.male.all$mod.tier == tier.label.2,]  ), silent = TRUE)
     
-    # gg.gbr.y.valid.bv.lon.Btau.male.0.tier.2
     
     gg.gbr.y.valid.bv.lon.Btau.male.0.tier.3 <- try(  gen.gg.valid(gg.d.reg.out.bv.lon.Btau.male.all[gg.d.reg.out.bv.lon.Btau.male.all$mod.tier == tier.label.3,]  ) , silent = TRUE)
-    
-    # gg.gbr.y.valid.bv.lon.Btau.male.0.tier.3
+  
     
     # Female
     if (  n.sexes == 2 ){
       
       gg.gbr.y.valid.bv.lon.Btau.female.0.tier.1 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Btau.female.all[gg.d.reg.out.bv.lon.Btau.female.all$mod.tier == tier.label.1 ,]) , silent = TRUE)
       
-      # gg.gbr.y.valid.bv.lon.Btau.female.0.tier.1
       
       gg.gbr.y.valid.bv.lon.Btau.female.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Btau.female.all[gg.d.reg.out.bv.lon.Btau.female.all$mod.tier == tier.label.2 ,]  ) , silent = TRUE)
       
-      # gg.gbr.y.valid.bv.lon.Btau.female.0.tier.2 
       
       gg.gbr.y.valid.bv.lon.Btau.female.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Btau.female.all[gg.d.reg.out.bv.lon.Btau.female.all$mod.tier == tier.label.3,]  ) , silent = TRUE)
       
-      #  gg.gbr.y.valid.bv.lon.Btau.female.0.tier.3
       
     }
     
@@ -518,31 +498,25 @@ if ( model.class.ME %in% model.classes.all ){
     # Male
     gg.gbr.y.valid.bv.hin.Btau.male.0.tier.1 <- try( gen.gg.valid(  gg.d.reg.out.bv.hin.Btau.male.all[gg.d.reg.out.bv.hin.Btau.male.all$mod.tier == tier.label.1,] ) , silent = TRUE)
     
-    # gg.gbr.y.valid.sp.hin.Btau.male.0.tier.1
     
     gg.gbr.y.valid.bv.hin.Btau.male.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Btau.male.all[gg.d.reg.out.bv.hin.Btau.male.all$mod.tier == tier.label.2,]  ) , silent = TRUE)
     
-    # gg.gbr.y.valid.sp.hin.Btau.male.0.tier.2
     
     gg.gbr.y.valid.bv.hin.Btau.male.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Btau.male.all[gg.d.reg.out.bv.hin.Btau.male.all$mod.tier == tier.label.3,]  ) , silent = TRUE)
     
-    # gg.gbr.y.valid.sp.hin.Btau.male.0.tier.3
     
     # Female
     if (n.sexes == 2){
       
       gg.gbr.y.valid.bv.hin.Btau.female.0.tier.1 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Btau.female.all[gg.d.reg.out.bv.hin.Btau.female.all$mod.tier == tier.label.1,]  ) , silent = TRUE)
       
-      # gg.gbr.y.valid.bv.hin.Btau.female.0.tier.1
       
       gg.gbr.y.valid.bv.hin.Btau.female.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Btau.female.all[gg.d.reg.out.bv.hin.Btau.female.all$mod.tier == tier.label.2,]  ) , silent = TRUE)
       
-      # gg.gbr.y.valid.bv.hin.Btau.female.0.tier.2
-      
+
       gg.gbr.y.valid.bv.hin.Btau.female.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Btau.female.all[gg.d.reg.out.bv.hin.Btau.female.all$mod.tier == tier.label.3,] ) , silent = TRUE)
       
-      # gg.gbr.y.valid.bv.hin.Btau.female.0.tier.3
-      
+
     }
     
     
@@ -555,7 +529,6 @@ if ( model.class.ME %in% model.classes.all ){
   # Crossbreds
   
 } # Generate plots
-
 
 
 # Plot re-formatting
@@ -915,7 +888,6 @@ if ( model.class.ME %in% model.classes.all ){
   
   
   # Bos indicus
-
   try( 
     
   gg.valid.bv.lon.Bind.male.all.base  <- ggarrange(
@@ -923,7 +895,7 @@ if ( model.class.ME %in% model.classes.all ){
 
     gg.y.valid.reg.out.bv.lon.Bind.male.p.tier.1
   , gg.y.valid.reg.out.bv.lon.Bind.male.p.tier.2
-  # , gg.y.valid.reg.out.bv.lon.Bind.male.p.tier.3
+   , gg.y.valid.reg.out.bv.lon.Bind.male.p.tier.3
   
     , nrow =  n.mod.form / 3 
     , heights =  heights
@@ -938,7 +910,7 @@ if ( model.class.ME %in% model.classes.all ){
     
     gg.y.valid.reg.out.bv.lon.Bind.female.p.tier.1
        ,   gg.y.valid.reg.out.bv.lon.Bind.female.p.tier.2
-    #   ,  gg.y.valid.reg.out.bv.lon.Bind.female.p.tier.3
+     ,  gg.y.valid.reg.out.bv.lon.Bind.female.p.tier.3
     
     
     , nrow =  n.mod.form /3 
@@ -950,9 +922,9 @@ if ( model.class.ME %in% model.classes.all ){
     
   gg.valid.bv.hin.Bind.male.all.base  <- ggarrange(
     
-    gg.y.valid.reg.out.bv.hin.Bind.male.p.tier.1
+           gg.y.valid.reg.out.bv.hin.Bind.male.p.tier.1
         ,   gg.y.valid.reg.out.bv.hin.Bind.male.p.tier.2
-    #  ,  gg.y.valid.reg.out.bv.hin.Bind.male.p.tier.3
+      ,  gg.y.valid.reg.out.bv.hin.Bind.male.p.tier.3
     
     
     , nrow = n.mod.form /3 
@@ -967,7 +939,7 @@ if ( model.class.ME %in% model.classes.all ){
     
     gg.y.valid.reg.out.bv.hin.Bind.female.p.tier.1
        ,   gg.y.valid.reg.out.bv.hin.Bind.female.p.tier.2
-    #   ,  gg.y.valid.reg.out.bv.hin.Bind.female.p.tier.3
+      ,  gg.y.valid.reg.out.bv.hin.Bind.female.p.tier.3
     
     
     , nrow =  n.mod.form /3 
@@ -987,7 +959,7 @@ if ( model.class.ME %in% model.classes.all ){
       
       gg.y.valid.reg.out.bv.lon.Btau.male.p.tier.1
          , gg.y.valid.reg.out.bv.lon.Btau.male.p.tier.2
-      #   ,  gg.y.valid.reg.out.bv.lon.Btau.male.p.tier.3
+         ,  gg.y.valid.reg.out.bv.lon.Btau.male.p.tier.3
       
       
       , nrow =  n.mod.form /3 
@@ -1003,7 +975,7 @@ if ( model.class.ME %in% model.classes.all ){
       
            gg.y.valid.reg.out.bv.lon.Btau.female.p.tier.1
                ,   gg.y.valid.reg.out.bv.lon.Btau.female.p.tier.2
-           #   ,   gg.y.valid.reg.out.bv.lon.Btau.female.p.tier.3
+              ,   gg.y.valid.reg.out.bv.lon.Btau.female.p.tier.3
       
       
       , nrow =  n.mod.form /3 
@@ -1017,7 +989,7 @@ if ( model.class.ME %in% model.classes.all ){
       
       gg.y.valid.reg.out.bv.hin.Btau.male.p.tier.1
            ,   gg.y.valid.reg.out.bv.hin.Btau.male.p.tier.2
-      #     ,  gg.y.valid.reg.out.bv.hin.Btau.male.p.tier.3
+           ,  gg.y.valid.reg.out.bv.hin.Btau.male.p.tier.3
       
       
       , nrow =  n.mod.form /3 
@@ -1033,7 +1005,7 @@ if ( model.class.ME %in% model.classes.all ){
       
       gg.y.valid.reg.out.bv.hin.Btau.female.p.tier.1
            ,   gg.y.valid.reg.out.bv.hin.Btau.female.p.tier.2
-      #    ,  gg.y.valid.reg.out.bv.hin.Btau.female.p.tier.3
+          ,  gg.y.valid.reg.out.bv.hin.Btau.female.p.tier.3
       
       
       , nrow = n.mod.form /3 
@@ -1046,8 +1018,6 @@ if ( model.class.ME %in% model.classes.all ){
   
   
 }
-
-
 
 # Annotations
 {
@@ -1244,8 +1214,7 @@ if ( model.class.ME %in% model.classes.all ){
     
   }
 
-} # GBR
-
+} 
 
 
 {
@@ -1253,7 +1222,7 @@ plot.dpi  <-  1000
 
 p.glob.scalar <- 0.675
 p.width.bv <- 3.15 * p.glob.scalar * 3
-p.height.bv  <- 3.25 * ( n.mod.form / 3 ) * p.glob.scalar 
+p.height.bv  <- 3.475 * ( n.mod.form / 3 ) * p.glob.scalar 
 
 filename.bv.lon.Bind.male =   str_c(results.out.dir.bv.figs , 'bovine.lon.Bind.male.jpeg')
 filename.bv.lon.Bind.female=   str_c(results.out.dir.bv.figs , 'bovine.lon.Bind.female.jpeg')

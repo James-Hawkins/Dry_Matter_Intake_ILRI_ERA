@@ -168,7 +168,7 @@ gen.gg.df.specific <<- function(  cur.mod , mc , species , breed , ndf , sex){
     
     animal.sample <- (de.listify( d.reg.out[  reg.out.cond.opt.mod ,  vn.total.animal.sample.size ][1]))
     
-    mod.id <- gen.gg.model.label(  tier.rank, cur.mod , mc)
+    mod.id <- gen.gg.model.label.new(  tier.rank, cur.mod , mc)
     
     model.label <- str_c( mod.id ) 
     
@@ -2033,6 +2033,7 @@ assign.sign <<- function( data , r ){
   
 }
 
+
 gen.gg.model.label <<- function( rank , cur.mod , mc){
   
   # test: rank <- 3; cur.mod <- 6 ; mc <- 1
@@ -2060,6 +2061,30 @@ gen.gg.model.label <<- function( rank , cur.mod , mc){
 }
 
 
+gen.gg.model.label.new <<- function( rank , cur.mod , mc){
+  
+  # test: rank <- 3; cur.mod <- 6 ; mc <- 1
+  
+  
+  # Define tier (1 to 3) 
+  if (cur.mod %in%  c(1,2,3) ){  label <- "T1"  }
+  if (cur.mod %in%  c(4,5,6) ){  label <- "T2"  }
+  if (cur.mod %in%  c(7,8,9) ){  label <- "T3" }
+  
+  
+  # Define rank within tier (1 to 3)
+  if ( rank == 1){   label <- str_c( label , "a") }
+  if ( rank  == 2){   label <- str_c( label , "b") }
+  if ( rank == 3){   label <- str_c( label , "c") }
+  
+  
+  # Add model class as suffix (after dash '-)
+  if (  mc == model.class.GBR ){    label <- str_c( label , "-GrB")  }
+  if (  mc == model.class.ME  ){   label <- str_c( label , "-Mxd")  }
+  
+  
+  return (label)
+}
 
 extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars , x.vars.se , VIF.dat , anim.samp ){
   
