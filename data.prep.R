@@ -326,15 +326,15 @@ d <- data.frame(d)
   # Variable interaction declarations and re-configurations
   d.reg.in$NDF_x_NDF_digest <- d.reg.in$NDF_digest * d.reg.in$NDF_nutrition
   
+  d.reg.in[ d.reg.in$Species == species.sheep , 'BW_frac_Mat'] <- d.reg.in[ d.reg.in$Species == species.sheep , 'bw_kg']  / 50
+  d.reg.in[ d.reg.in$Species == species.goat, 'BW_frac_Mat'] <- d.reg.in[ d.reg.in$Species == species.goat, 'bw_kg']  / 35
   
-  d.reg.in[ d.reg.in$Species == species.sheep , 'BW_frac_Mat_BW'] <- d.reg.in[ d.reg.in$Species == species.sheep , 'bw_kg']  / 50
-  d.reg.in[ d.reg.in$Species == species.goat, 'BW_frac_Mat_BW'] <- d.reg.in[ d.reg.in$Species == species.goat, 'bw_kg']  / 35
-  
+  d.reg.in[ d.reg.in$Species == species.cattle  & d.reg.in$breed.type == breed.indig, 'BW_frac_Mat'] <- d.reg.in[ d.reg.in$Species == species.cattle & d.reg.in$breed.type == breed.indig , 'bw_kg']  / 300
+  d.reg.in[ d.reg.in$Species == species.cattle  & d.reg.in$breed.type == breed.cbred, 'BW_frac_Mat'] <- d.reg.in[ d.reg.in$Species == species.cattle & d.reg.in$breed.type == breed.cbred , 'bw_kg']  / 420 
   
   d.reg.in$Met_bw_kg <- d.reg.in$bw_kg ^ 0.75
   
-  
-  pred.vars <- c( pred.vars ,  'Met_bw_kg' , 'BW_frac_Mat_BW')
+  pred.vars <- c( pred.vars ,  'Met_bw_kg' , 'BW_frac_Mat')
   
 
   for (v in all.vars){
@@ -359,8 +359,6 @@ d <- data.frame(d)
   }
   
   
- 
-  
   for (s in suffixes){ 
     
     new.var.DV <- str_c( v.list.DV[1] ,s )
@@ -368,6 +366,12 @@ d <- data.frame(d)
     
     new.var.BW <- str_c( v.list.BW[2] ,s )
     v.list.BW <- append(v.list.BW , new.var.BW )
+    
+    new.var.MBW <- str_c( v.list.MBW[2] ,s )
+    v.list.MBW <- append( v.list.MBW, new.var.BW )
+    
+    new.var.BW_fM <- str_c( v.list.BW.fM[2] ,s )
+    v.list.BW.fM <- append( v.list.BW.fM, new.var.BW_fM)
     
     new.var.ADG <- str_c( v.list.ADG[2] ,s )
     v.list.ADG <- append(v.list.ADG , new.var.ADG )
@@ -416,6 +420,9 @@ d <- data.frame(d)
     
     v.list.DV 
     , v.list.BW 
+    , v.list.MBW 
+    , v.list.BW.fM 
+    
     , v.list.ADG 
     
     , v.list.MY
@@ -496,6 +503,7 @@ d <- data.frame(d)
 
  
  
+
 } # Data pre-processing
 
 

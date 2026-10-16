@@ -31,7 +31,7 @@ random.exp.int <<- FALSE
 fold.by.exp <<- TRUE
 
 # age.status <<- 'growing'
-age.status <<- NA
+#age.status <<- NA
 
 
 # GBR compute SEs
@@ -100,7 +100,7 @@ max.m.stops <<- c( 1500 , 1500 , 1500 , 1500)
 
 # QUALITY CONTROL (outlier control)
 remove.outliers <<- TRUE # If true, removes outliers using two methods
-remove.outliers.range.method <<- FALSE
+remove.outliers.range.method <<- TRUE
 remove.outliers.residual.method <<- TRUE
 
 
@@ -120,26 +120,32 @@ outlier.range.minimum.sr <<- c(
   , 0.4
   , 50
   ,80
-  , -1.200
+,0
+,0
+,0
+,-2000
+,0
+,0
+,0
+,0
 )
 
 outlier.range.maximum.sr <<- c(
-   100
+   120
   ,12
   , 900
+  , 500
+  , 250
   , 300
-  , 1.500
-  
+  ,300
+  ,2000
+  ,0
+ ,0
+ ,0
+ ,0
 )
 
 #' ordering
-
-
-
-
-
-#' 'adg_g_day'
- 
 
 # Bovines
 outlier.range.minimum.bv <<- c(
@@ -173,6 +179,11 @@ outlier.range.maximum.bv <<- c(
 )
 
 
+length(outlier.range.minimum.sr)
+length(outlier.range.maximum.sr)
+
+length(outlier.range.minimum.bv)
+length(outlier.range.maximum.bv)
 
 # Model stability computation metrics
 

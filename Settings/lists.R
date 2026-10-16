@@ -6,6 +6,8 @@
 pred.vars <<- c(
   
   pred.var.BW
+  ,   pred.var.MBW
+  , pred.var.BW.fM
   , pred.var.ADG
   , pred.var.MY 
   
@@ -28,6 +30,29 @@ pred.vars <<- c(
 
 all.vars <- c( pred.vars , c(y.var.reg)) 
 
+
+
+vars.outlier.ranges <<- c(
+  
+  'bw_kg'
+  , 'feed_intake_kg_d'
+  
+  
+  , 'NDF_nutrition'
+  , 'ADF_nutrition'
+  
+  , 'CP_nutrition'
+  , 'EE_nutrition'
+  , 'Ash_nutrition'
+  
+  , 'adg_kg_day'
+  
+  , 'ADL_nutrition'
+  , 'DM_digest'
+  , 'OM_digest'
+  , 'DM_digest'
+  
+)
 
 
 
@@ -104,7 +129,9 @@ model.variables.all <<- c(
   , vn.coef.int 
   ,vn.coef.offset.plus.intercept 
   
-  ,vn.coef.BW 
+  , vn.coef.BW 
+  , vn.coef.MBW 
+  , vn.coef.BW_fM
   ,vn.coef.ADG 
   , vn.coef.MY
   , vn.coef.NDF 
@@ -231,6 +258,20 @@ model.variables.all <<- c(
   , vn.coef.ws.bw.sqd 
   , vn.coef.ws.bw.cbd 
   
+  , vn.coef.ws.mbw 
+  , vn.coef.ws.mbw.e25 
+  , vn.coef.ws.mbw.sqt 
+  , vn.coef.ws.mbw.e75 
+  , vn.coef.ws.mbw.sqd 
+  , vn.coef.ws.mbw.cbd 
+  
+  , vn.coef.ws.bw_frac_Mat 
+  , vn.coef.ws.bw_frac_Mat.e25 
+  , vn.coef.ws.bw_frac_Mat.sqt 
+  , vn.coef.ws.bw_frac_Mat.e75 
+  , vn.coef.ws.bw_frac_Mat.sqd 
+  , vn.coef.ws.bw_frac_Mat.cbd 
+  
   , vn.coef.ws.ADG 
   , vn.coef.ws.ADG.e25 
   , vn.coef.ws.ADG.sqt 
@@ -335,6 +376,19 @@ model.variables.all <<- c(
   , vn.coef.se.ws.bw.sqd 
   , vn.coef.se.ws.bw.cbd 
   
+  , vn.coef.se.ws.mbw 
+  , vn.coef.se.ws.mbw.e25 
+  , vn.coef.se.ws.mbw.sqt 
+  , vn.coef.se.ws.mbw.e75 
+  , vn.coef.se.ws.mbw.sqd 
+  , vn.coef.se.ws.mbw.cbd 
+  
+  , vn.coef.se.ws.bw_frac_Mat
+  , vn.coef.se.ws.bw_frac_Mat.e25 
+  , vn.coef.se.ws.bw_frac_Mat.sqt 
+  , vn.coef.se.ws.bw_frac_Mat.e75 
+  , vn.coef.se.ws.bw_frac_Mat.sqd 
+  , vn.coef.se.ws.bw_frac_Mat.cbd 
   
   , vn.coef.se.ws.ADG 
   , vn.coef.se.ws.ADG.e25 
@@ -438,6 +492,20 @@ model.variables.all <<- c(
   , vn.coef.sign.ws.bw.sqd 
   , vn.coef.sign.ws.bw.cbd 
   
+  , vn.coef.sign.ws.mbw 
+  , vn.coef.sign.ws.mbw.e25 
+  , vn.coef.sign.ws.mbw.sqt 
+  , vn.coef.sign.ws.mbw.e75 
+  , vn.coef.sign.ws.mbw.sqd 
+  , vn.coef.sign.ws.mbw.cbd 
+  
+  , vn.coef.sign.ws.BW_frac_Mat
+  , vn.coef.sign.ws.BW_frac_Mat.e25 
+  , vn.coef.sign.ws.BW_frac_Mat.sqt 
+  , vn.coef.sign.ws.BW_frac_Mat.e75 
+  , vn.coef.sign.ws.BW_frac_Mat.sqd 
+  , vn.coef.sign.ws.BW_frac_Mat.cbd 
+  
   
   , vn.coef.sign.ws.ADG 
   , vn.coef.sign.ws.ADG.e25 
@@ -534,6 +602,8 @@ model.variables.all <<- c(
   
   # Variance inflation factors
   , vn.VIF.bw 
+  , vn.VIF.mbw 
+  , vn.VIF.bw_fM
   , vn.VIF.ADG 
   , vn.VIF.MY 
   , vn.VIF.GES 
@@ -551,6 +621,8 @@ model.variables.all <<- c(
   # Variable importance (ML methods only)
   ,vn.mn.var.imp.int 
   ,vn.mn.var.imp.BW 
+  ,vn.mn.var.imp.MBW 
+  ,vn.mn.var.imp.BW.fM
   ,vn.mn.var.imp.ADG 
   ,vn.mn.var.imp.NDF 
   ,vn.mn.var.imp.CP 
@@ -563,6 +635,8 @@ model.variables.all <<- c(
   # Variable importance in relative terms 
   ,vn.mn.var.rel.imp.int 
   ,vn.mn.var.rel.imp.BW 
+  ,vn.mn.var.rel.imp.MBW
+  ,vn.mn.var.rel.imp.BW.fM
   ,vn.mn.var.rel.imp.ADG 
   ,vn.mn.var.rel.imp.NDF 
   ,vn.mn.var.rel.imp.CP 
@@ -575,6 +649,8 @@ model.variables.all <<- c(
   
   ,vn.sd.var.imp.rel.int 
   ,vn.sd.var.imp.rel.BW 
+  ,vn.sd.var.imp.rel.MBW 
+  ,vn.sd.var.imp.rel.BW.fM
   ,vn.sd.var.imp.rel.ADG 
   ,vn.sd.var.imp.rel.NDF 
   ,vn.sd.var.imp.rel.CP 
@@ -588,6 +664,8 @@ model.variables.all <<- c(
   
   ,vn.sd.var.imp.int 
   ,vn.sd.var.imp.BW 
+  ,vn.sd.var.imp.MBW 
+  ,vn.sd.var.imp.BW.fM
   ,vn.sd.var.imp.ADG 
   ,vn.sd.var.imp.NDF 
   ,vn.sd.var.imp.CP 
@@ -747,6 +825,14 @@ coefficients.variables.all <<-c(
   , vn.coef.se.ws.bw
   , vn.coef.sign.ws.bw
   
+  , vn.coef.ws.mbw 
+  , vn.coef.se.ws.mbw
+  , vn.coef.sign.ws.mbw
+  
+  , vn.coef.ws.bw_frac_Mat 
+  , vn.coef.se.ws.bw_frac_Mat 
+  , vn.coef.sign.ws.BW_frac_Mat 
+  
   
   , vn.coef.ws.ADG 
   , vn.coef.se.ws.ADG
@@ -809,6 +895,16 @@ coefficients.variables.all <<-c(
   , vn.coef.ws.bw.sqd
   , vn.coef.se.ws.bw.sqd
   
+  , vn.coef.ws.mbw.sqt
+  , vn.coef.se.ws.mbw.sqt
+  , vn.coef.ws.mbw.sqd
+  , vn.coef.se.ws.mbw.sqd
+  
+  , vn.coef.ws.bw_frac_Mat.sqt
+  , vn.coef.se.ws.bw_frac_Mat.sqt
+  , vn.coef.ws.bw_frac_Mat.sqd
+  , vn.coef.se.ws.bw_frac_Mat.sqd
+  
   , vn.coef.ws.ADG.sqt  
   , vn.coef.se.ws.ADG.sqt
   , vn.coef.ws.ADG.sqd
@@ -832,6 +928,8 @@ coefficients.variables.all <<-c(
   
   # Variance inflation factors
   , vn.VIF.bw 
+  , vn.VIF.mbw 
+  , vn.VIF.bw_fM 
   , vn.VIF.ADG 
   , vn.VIF.MY 
   , vn.VIF.NDF 
@@ -862,6 +960,28 @@ vns.coef.ws.BW <<- c(
   , vn.coef.ws.bw.log
 )
 
+
+vns.coef.ws.MBW <<- c(
+  vn.coef.ws.mbw
+  , vn.coef.ws.mbw.e25
+  
+  , vn.coef.ws.mbw.sqt
+  , vn.coef.ws.mbw.e75
+  , vn.coef.ws.mbw.sqd
+  , vn.coef.ws.mbw.cbd
+  , vn.coef.ws.mbw.log
+)
+
+vns.coef.ws.BW_fM <<- c(
+  vn.coef.ws.bw_frac_Mat
+  , vn.coef.ws.bw_frac_Mat.e25
+  
+  , vn.coef.ws.bw_frac_Mat.sqt
+  , vn.coef.ws.bw_frac_Mat.e75
+  , vn.coef.ws.bw_frac_Mat.sqd
+  , vn.coef.ws.bw_frac_Mat.cbd
+  , vn.coef.ws.bw_frac_Mat.log
+)
 
 vns.coef.ws.ADG <<- c(
   vn.coef.ws.ADG
@@ -1018,6 +1138,29 @@ vns.coef.se.ws.BW <<- c(
   , vn.coef.se.ws.bw.sqd
   , vn.coef.se.ws.bw.cbd
   , vn.coef.se.ws.bw.log
+)
+
+
+vns.coef.se.ws.MBW <<- c(
+  vn.coef.se.ws.mbw
+  , vn.coef.se.ws.mbw.e25
+  
+  , vn.coef.se.ws.mbw.sqt
+  , vn.coef.se.ws.mbw.e75
+  , vn.coef.se.ws.mbw.sqd
+  , vn.coef.se.ws.mbw.cbd
+  , vn.coef.se.ws.mbw.log
+)
+
+vns.coef.se.ws.BW_fM <<- c(
+  vn.coef.se.ws.bw_frac_Mat
+  , vn.coef.se.ws.bw_frac_Mat.e25
+  
+  , vn.coef.se.ws.bw_frac_Mat.sqt
+  , vn.coef.se.ws.bw_frac_Mat.e75
+  , vn.coef.se.ws.bw_frac_Mat.sqd
+  , vn.coef.se.ws.bw_frac_Mat.cbd
+  , vn.coef.se.ws.bw_frac_Mat.log
 )
 
 
@@ -1180,6 +1323,29 @@ vns.coef.sign.ws.BW <<- c(
 )
 
 
+vns.coef.sign.ws.MBW <<- c(
+  vn.coef.sign.ws.mbw
+  , vn.coef.sign.ws.mbw.e25
+  
+  , vn.coef.sign.ws.mbw.sqt
+  , vn.coef.sign.ws.mbw.e75
+  , vn.coef.sign.ws.mbw.sqd
+  , vn.coef.sign.ws.mbw.cbd
+  , vn.coef.sign.ws.mbw.log
+)
+
+vns.coef.sign.ws.BW_frac_Mat <<- c(
+  vn.coef.sign.ws.BW_frac_Mat
+  , vn.coef.sign.ws.BW_frac_Mat.e25
+  
+  , vn.coef.sign.ws.BW_frac_Mat.sqt
+  , vn.coef.sign.ws.BW_frac_Mat.e75
+  , vn.coef.sign.ws.BW_frac_Mat.sqd
+  , vn.coef.sign.ws.BW_frac_Mat.cbd
+  , vn.coef.sign.ws.BW_frac_Mat.log
+)
+
+
 vns.coef.sign.ws.ADG <<- c(
   vn.coef.sign.ws.ADG
   , vn.coef.sign.ws.ADG.e25
@@ -1339,6 +1505,28 @@ vns.coef.bs.BW <<- c(
 )
 
 
+vns.coef.bs.MBW <<- c(
+  vn.coef.bs.mbw
+  , vn.coef.bs.mbw.e25
+  
+  , vn.coef.bs.mbw.sqt
+  , vn.coef.bs.mbw.e75
+  , vn.coef.bs.mbw.sqd
+  , vn.coef.bs.mbw.cbd
+  , vn.coef.bs.mbw.log
+)
+
+vns.coef.bs.BW_fM <<- c(
+  vn.coef.bs.bw_fM
+  , vn.coef.bs.bw_fM.e25
+  
+  , vn.coef.bs.bw_fM.sqt
+  , vn.coef.bs.bw_fM.e75
+  , vn.coef.bs.bw_fM.sqd
+  , vn.coef.bs.bw_fM.cbd
+  , vn.coef.bs.bw_fM.log
+)
+
 vns.coef.bs.ADG <<- c(
   vn.coef.bs.ADG
   , vn.coef.bs.ADG.e25
@@ -1487,6 +1675,8 @@ vns.coef.bs.DM <<- c(
 
 vns.coef.bs.All <<- c(
   vns.coef.bs.BW
+  ,  vns.coef.bs.MBW
+  ,   vns.coef.bs.BW_fM
   ,vns.coef.bs.ADG
   
   
@@ -1513,16 +1703,31 @@ all.x.vars <<- c(
   
   
   "bw_kg" 
-  #, 'BW_frac_Mat_BW'
-  #, 'Met_bw_kg'
   , "bw_kg.e25" 
   , "bw_kg.sqt" 
   , "bw_kg.e75"  
   , "bw_kg.sqd" 
   , "bw_kg.cbd"  
-  
   , "bw_kg.log" 
   
+  
+  , "Met_bw_kg" 
+  , "Met_bw_kg.e25" 
+  , "Met_bw_kg.sqt" 
+  , "Met_bw_kg.e75"  
+  , "Met_bw_kg.sqd" 
+  , "Met_bw_kg.cbd"  
+  , "Met_bw_kg.log" 
+  
+  , "BW_frac_Mat" 
+  , "BW_frac_Mat.e25" 
+  , "BW_frac_Mat.sqt" 
+  , "BW_frac_Mat.e75"  
+  , "BW_frac_Mat.sqd" 
+  , "BW_frac_Mat.cbd"  
+  , "BW_frac_Mat.log" 
+  
+ 
   , "adg_kg_day"
   , "adg_kg_day.e25"
   , "adg_kg_day.sqt"
@@ -1660,7 +1865,12 @@ main.x.vars <<- all.x.vars[ which(
 ]
 
 
+
 all.BW.vars <<- all.x.vars[which(  str_detect(  all.x.vars ,'bw' ) ) ] 
+all.MBW.vars <<- all.x.vars[which(  str_detect(  all.x.vars ,'Met_bw' ) ) ] 
+all.BW_frac_Mat.vars <<- all.x.vars[which(  str_detect(  all.x.vars ,'BW_frac_Mat' ) ) ] 
+
+
 all.ADG.vars <<- all.x.vars[which(  str_detect(  all.x.vars ,'adg' ) ) ] 
 
 all.NDF.vars <<- all.x.vars[which(  str_detect(  all.x.vars ,'NDF' ) ) ] 
@@ -1719,8 +1929,8 @@ for (e in 1:length(all.x.vars)){
   c.var <- all.x.vars[e]
   
   if ( str_detect( c.var , 'bw_kg' )   ){  lab.2.add <- label.alias.BW }
-  if ( str_detect( c.var , 'bw_kg.e75' )   ){  lab.2.add <- label.alias.MBW }
-  if ( str_detect( c.var , 'BW_frac_Mat_BW' )   ){  lab.2.add <- label.alias.BWFM  }
+  if ( str_detect( c.var , 'Met_bw_kg' )   ){  lab.2.add <- label.alias.MBW }
+  if ( str_detect( c.var , 'BW_frac_Mat' )   ){  lab.2.add <- label.alias.BWFM  }
   
   if ( str_detect( c.var , 'adg' )   ){  lab.2.add <- label.alias.ADG  } 
   if ( str_detect( c.var , 'milk' )   ){  lab.2.add <- label.alias.MY } 

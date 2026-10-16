@@ -9,11 +9,8 @@ if (  n.ndf == 1 ) { d.reg.in$ndf.level <- ndf.lev.lo }
 
 d.reg.in.min.vars <-  ( !is.na(d.reg.in$feed_intake_g_d) & !is.na(d.reg.in$bw_kg) &  !is.na(d.reg.in$adg_kg_day) &  !is.na(d.reg.in$Sample.size)  )
   
-if ( is.na(age.status) ) { d.reg.in.age.subset <- TRUE } else if (age.status == 'growing') { 
-    d.reg.in.age.subset <- ( d.reg.in$bw_kg < 20 & !is.na(d.reg.in$bw_kg )) }
-  
-  
-  d.reg.in.dont.exclude <- ( d.reg.in.age.subset &   d.reg.in.min.vars )
+
+d.reg.in.dont.exclude <- ( d.reg.in.min.vars )
   
   # handle outliers
   cnd.sp.lo.ndf.male.pre.ol <- (d.reg.in.min.vars & d.reg.in$Species == species.sheep  & d.reg.in$sex %in% sex.male & d.reg.in$ndf.level == ndf.lev.lo & d.reg.in.dont.exclude & !is.na(d.reg.in$ndf.level)) 
@@ -48,7 +45,7 @@ if ( is.na(age.status) ) { d.reg.in.age.subset <- TRUE } else if (age.status == 
   #  ~ ~ - - - - - - Outlier control --
   d.reg.in[,ol.status.residual.method.var.name] <- FALSE
   d.reg.in[,ol.status.range.method.var.name ] <- FALSE
-  
+
   # Categorize rows according to outlier method -- regression residual method
   if (  remove.outliers & remove.outliers.residual.method  ) { 
     

@@ -219,16 +219,19 @@ AIC( scope.me)
   
 
 {
+  
+  
+
   # LOW NDF
   # Bos indicus
   # MALE
-  GBR.mod.1.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg    )
-  GBR.mod.2.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg + adg_kg_day   )
+  GBR.mod.1.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg   + adg_kg_day )
+  GBR.mod.2.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg  + adg_kg_day   )
   GBR.mod.3.bv.lo.ndf.Bind.male <- as.formula(  feed_intake_g_d  ~  bw_kg + adg_kg_day  +  adg_kg_day.sqd  )
   
   GBR.mod.4.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day +  NDF_nutrition  )
   GBR.mod.5.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg +  adg_kg_day + CP_nutrition  )
-  GBR.mod.6.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg +  adg_kg_day + ADF_nutrition )
+  GBR.mod.6.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~ bw_kg +  adg_kg_day + ADF_nutrition )
   
   GBR.mod.7.bv.lo.ndf.Bind.male <- as.formula(  feed_intake_g_d  ~  bw_kg +  adg_kg_day  +  NDF_nutrition + EE_nutrition    )
   GBR.mod.8.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day  +  CP_nutrition +  EE_nutrition   )
@@ -236,17 +239,17 @@ AIC( scope.me)
   
   
   # FEMALE
-  GBR.mod.1.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg  + milk_prod_kg_d  )
-  GBR.mod.2.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg + milk_prod_kg_d + adg_kg_day  )
-  GBR.mod.3.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  bw_kg + milk_prod_kg_d + adg_kg_day + adg_kg_day.sqd)
+  GBR.mod.1.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~ bw_kg   + adg_kg_day  +milk_prod_kg_d  )
+  GBR.mod.2.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~ bw_kg  + adg_kg_day  + milk_prod_kg_d  )
+  GBR.mod.3.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  bw_kg   + milk_prod_kg_d + adg_kg_day + adg_kg_day.sqd)
   
-  GBR.mod.4.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day +  ADF_nutrition +  milk_prod_kg_d )
-  GBR.mod.5.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg +  adg_kg_day + CP_nutrition +  milk_prod_kg_d)
-  GBR.mod.6.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg +  adg_kg_day + NDF_nutrition + milk_prod_kg_d)
+  GBR.mod.4.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg  + adg_kg_day +  ADF_nutrition +  milk_prod_kg_d )
+  GBR.mod.5.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg  + adg_kg_day +  CP_nutrition +  milk_prod_kg_d)
+  GBR.mod.6.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg + adg_kg_day +   NDF_nutrition + milk_prod_kg_d)
   
-  GBR.mod.7.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  bw_kg +  adg_kg_day  +  adg_kg_day +  EE_nutrition   + milk_prod_kg_d)
-  GBR.mod.8.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day  +  adg_kg_day +  EE_nutrition  + milk_prod_kg_d)
-  GBR.mod.9.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day +  adg_kg_day +  EE_nutrition  +  milk_prod_kg_d)
+  GBR.mod.7.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  bw_kg  +  adg_kg_day  +  EE_nutrition   + milk_prod_kg_d)
+  GBR.mod.8.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg  +  adg_kg_day  +    EE_nutrition  + milk_prod_kg_d)
+  GBR.mod.9.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg  +  adg_kg_day +    EE_nutrition  +  milk_prod_kg_d)
   
   # Crossbreds
   # MALE

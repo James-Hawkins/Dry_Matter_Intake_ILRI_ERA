@@ -265,23 +265,19 @@ print(' Creating validation plots ')
 # -- ~~~~~~~~~~~~~~ --- CATTLE --- ~~~~~~~~~~~~~~ 
 {
   
-  # Plot basic GBR model (model class = 1)
-  
   # Bos indicus ( breed.indig )
   breed <- breed.indig[1]
   
   sex <- sex.male[1] 
   
-  gg.d.reg.out.bv.lon.Bind.male.all <- gen.gg.valid.data( 1 , species.cattle , breed  , ndf.lev.lo , sex )
-  
-
+  gg.d.reg.out.bv.lon.Bind.male.all <- gen.gg.valid.data( species.cattle , breed  , ndf.lev.lo , sex )
   
   # FEMALE
   if ( n.sexes == 2 ){
     
   sex <- sex.female 
   
-  gg.d.reg.out.bv.lon.Bind.female.all <- gen.gg.valid.data( 1 , species.cattle ,   breed , ndf.lev.lo , sex)
+  gg.d.reg.out.bv.lon.Bind.female.all <- gen.gg.valid.data( species.cattle ,   breed , ndf.lev.lo , sex)
 
     }
   
@@ -290,7 +286,7 @@ print(' Creating validation plots ')
   
   try(
     
-  gg.d.reg.out.bv.hin.Bind.male.all <- gen.gg.valid.data( 1 , species.cattle ,  breed , ndf.lev.hi , sex )
+  gg.d.reg.out.bv.hin.Bind.male.all <- gen.gg.valid.data( species.cattle ,  breed , ndf.lev.hi , sex )
  
   , silent = TRUE)
   
@@ -300,7 +296,7 @@ print(' Creating validation plots ')
     
   sex <- sex.female
   
-  gg.d.reg.out.bv.hin.Bind.female.all <- gen.gg.valid.data( 1 , species.cattle ,  breed , ndf.lev.hi , sex )
+  gg.d.reg.out.bv.hin.Bind.female.all <- gen.gg.valid.data( species.cattle ,  breed , ndf.lev.hi , sex )
   
   }
   
@@ -310,7 +306,7 @@ print(' Creating validation plots ')
   breed <- breed.cbred
   sex <- sex.male[1] 
   
-  gg.d.reg.out.bv.lon.Btau.male.all <- gen.gg.valid.data( 1 , species.cattle , breed  , ndf.lev.lo , sex)
+  # gg.d.reg.out.bv.lon.Btau.male.all <- gen.gg.valid.data( species.cattle , breed  , ndf.lev.lo , sex)
   
   
   # FEMALE
@@ -318,14 +314,14 @@ print(' Creating validation plots ')
     
     sex <- sex.female 
     
-    gg.d.reg.out.bv.lon.Btau.female.all <- gen.gg.valid.data( 1 , species.cattle ,   breed , ndf.lev.lo , sex )
+    gg.d.reg.out.bv.lon.Btau.female.all <- gen.gg.valid.data(  species.cattle ,   breed , ndf.lev.lo , sex )
     
   }
   
   # High NDF
   sex <- sex.male[1]
   
-  gg.d.reg.out.bv.hin.Btau.male.all <- gen.gg.valid.data( 1 , species.cattle ,  breed , ndf.lev.hi , sex  )
+  # gg.d.reg.out.bv.hin.Btau.male.all <- gen.gg.valid.data( 1 , species.cattle ,  breed , ndf.lev.hi , sex  )
   
   
   # FEMALE
@@ -334,85 +330,11 @@ print(' Creating validation plots ')
     
     sex <- sex.female
     
-    gg.d.reg.out.bv.hin.Btau.female.all <- gen.gg.valid.data( 1 , species.cattle ,  breed , ndf.lev.hi , sex )
+    gg.d.reg.out.bv.hin.Btau.female.all <- gen.gg.valid.data( species.cattle ,  breed , ndf.lev.hi , sex )
     
   }
   }
-  
 
-  # Plot ME models 
-  
-
-if ( model.class.ME %in% model.classes.all ){ 
-    
-    # Bos indicus
-    
-  model.class <- model.class.ME ; breed <- breed.indig[1] ; sex <- sex.male[1]
-  
-  gg.d.me.bv.lon.Bind.male <- gen.gg.valid.data(  model.class , species.cattle ,  breed , ndf.lev.lo , sex )
-  
-  
-  if ( n.sexes == 2 ){
-    
-    sex <- sex.female
-
-    gg.d.me.bv.lon.Bind.female <- gen.gg.valid.data( model.class , species.cattle ,  breed , ndf.lev.lo , sex )
-    
-  }
-  
-  # High NDF
-  sex <- sex.male[1]
-  
-  try (
-  
-  gg.d.me.bv.hin.Bind.male <- gen.gg.valid.data( model.class  , species.cattle , breed , ndf.lev.hi , sex )
-  
-  
-  , silent = TRUE)
-  
-  if ( n.sexes == 2 ){
-    
-    sex <- sex.female
-    
-    gg.d.me.bv.hin.Bind.female <- gen.gg.valid.data( model.class , species.cattle ,  breed , ndf.lev.hi , sex )
-    
-  }
-  
-  
-  # Crossbred
-  if ( n.breeds == 2 ){ 
-    
-    breed <- breed.cbred ; sex <- sex.male[1]
-    
-    gg.d.me.bv.lon.Btau.male <- gen.gg.valid.data(  model.class , species.cattle ,  breed , ndf.lev.lo , sex )
-    
-    
-    if ( n.sexes == 2 ){
-      
-      sex <- sex.female
-      
-      gg.d.me.bv.lon.Btau.female <- gen.gg.valid.data( model.class , species.cattle ,  breed , ndf.lev.lo , sex )
-      
-    }
-    
-    # High NDF
-    sex <- sex.male[1]
-    
-    gg.d.me.bv.hin.Btau.male <- gen.gg.valid.data( model.class , species.cattle , breed , ndf.lev.hi , sex )
-    
-    
-    if ( n.sexes == 2 ){
-      
-      sex <- sex.female
-      
-      gg.d.me.bv.hin.Btau.female <- gen.gg.valid.data( model.class , species.cattle ,  breed , ndf.lev.hi , sex )
-      
-    }
-    
-  }
-  
-}
-  
   
 } # Data frame tabulation 
 
@@ -423,6 +345,7 @@ if ( model.class.ME %in% model.classes.all ){
   # Bos indicus
   # Cattle low NDF
   # Male
+
   gg.gbr.y.valid.bv.lon.Bind.male.0.tier.1 <- try( gen.gg.valid( gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.1 ,]   ) , silent = TRUE)
   
   

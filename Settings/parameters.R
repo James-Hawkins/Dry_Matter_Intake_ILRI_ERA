@@ -33,8 +33,8 @@ ndf.lev.hi.lab <<- 'High NDF'
 
 
 
-ndf.thresh.lo <<- 400
-ndf.thresh.hi <<- 400
+#ndf.thresh.lo <<- 400
+#ndf.thresh.hi <<- 400
 
 ndf.thresh.sheep <<- 385
 ndf.thresh.goat <<- 420

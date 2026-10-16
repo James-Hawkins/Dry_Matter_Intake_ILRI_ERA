@@ -482,9 +482,6 @@ gg.bp.generic <- function(   plot.raw ,  data  ,  variable  ,  y.lab ){
 
 {
   
-  d.reg.in$adg_kg_day
-  
-
 gg.bp.dmi.0 <- gg.bp.generic(   gg.bp.0 ,  d.reg.in , 'feed_intake_kg_d' , y.tit.dmi )
 
 gg.bp.bw.0 <- gg.bp.generic(   gg.bp.0 ,  d.reg.in , 'bw_kg' , y.tit.bw )

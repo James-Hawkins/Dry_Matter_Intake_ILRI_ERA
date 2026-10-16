@@ -19,7 +19,7 @@ de.listify <<- function( d ){
 
 
 
-gen.gg.df.specific <<- function(  cur.mod , mc , species , breed , ndf , sex){
+gen.gg.df.specific <<- function(  cur.mod , species , breed , ndf , sex){
   
   # cur.mod <- 2; vers <- 'pmetric' ; mc <- 1 ; species <- species.cattle ; breed <- breed.indig
   
@@ -29,11 +29,12 @@ gen.gg.df.specific <<- function(  cur.mod , mc , species , breed , ndf , sex){
   test.sp.lon <- function(){
     
     species <- species.cattle
-    ndf <- ndf.lev.hi
-    cur.mod <- 7; mc <- 1
+    ndf <- ndf.lev.lo
+    cur.mod <- 4 ; mc <- 1
     
-    sex <- 2
-    breed <- 1
+    sex <- 1
+    breed <- 2
+    
     
   }
   
@@ -95,7 +96,7 @@ gen.gg.df.specific <<- function(  cur.mod , mc , species , breed , ndf , sex){
       
       (
         r.cond 
-        #    & d.reg.out$mod.class == mc 
+        #   & d.reg.out$mod.class == mc   # verify this
            & d.reg.out$is.best.model.in.formula 
       )
       
@@ -103,23 +104,40 @@ gen.gg.df.specific <<- function(  cur.mod , mc , species , breed , ndf , sex){
     
     
     
-    
-    tier.rank <- unique( d.reg.out[
+      tier.rank <- unique( d.reg.out[
       
       (
-        r.cond 
-        & d.reg.out$is.best.model.in.formula
-      )
+      r.cond 
+      #   & d.reg.out$is.best.model.in.formula
+     )
       
       
-      , vn.tier.rank  ]
+     , vn.tier.rank  ]
     
       )
+      
+      tier.rank <- tier.rank[ which( !is.na(tier.rank) )]
     
-    if  (   length(tier.rank) == 0   ) {return (NULL)}
-    if  (   is.na(tier.rank)   ) {return (NULL)}
+    #  if  (   length(tier.rank) == 0   ) {return (NULL)}
+      
+      if ( length(tier.rank) == 0){return (NULL)}
+      if  (   is.na(tier.rank)   ) {return (NULL)}
     
-    #  if (  is.na(tier.rank)  ) { tier.rank <- 3 } # update this
+
+      if (FALSE){
+    if (  cur.mod == 1  ) { tier.rank <- 1 }
+    if (  cur.mod == 2  ) { tier.rank <- 2 }
+    if (  cur.mod == 3  ) { tier.rank <- 3 }
+    
+    if (  cur.mod == 4  ) { tier.rank <- 1 }
+    if (  cur.mod == 5  ) { tier.rank <- 2 }
+    if (  cur.mod == 6  ) { tier.rank <- 3 }
+    
+    if (  cur.mod == 7  ) { tier.rank <- 1 }
+    if (  cur.mod == 8  ) { tier.rank <- 2 }
+    if (  cur.mod == 9  ) { tier.rank <- 3 }
+    
+      }
     
     
     # Figure display items
@@ -168,7 +186,10 @@ gen.gg.df.specific <<- function(  cur.mod , mc , species , breed , ndf , sex){
     
     animal.sample <- (de.listify( d.reg.out[  reg.out.cond.opt.mod ,  vn.total.animal.sample.size ][1]))
     
-    mod.id <- gen.gg.model.label.new(  tier.rank, cur.mod , mc)
+    mod.id <- gen.gg.model.label.new(  breed, ndf , sex ,    tier.rank, cur.mod , mc)
+    
+
+    
     
     model.label <- str_c( mod.id ) 
     
@@ -755,19 +776,18 @@ gen.eval.metrics <- function( m , mt ,form ,d , y  , t.ids , e.ids  ,offset , da
   
 test.criteria <- function(){
   
-  row <- r.cnt
-  m <-  model.NRC
+  row <- r
+  m <-  model
   mc <- 3
   form <- formula
-  d <- data
-  y <-  data[,y.var.reg] 
-  t.ids <- t.IDs
-  e.ids <-  e.IDs
+  d <- test.data
+  y <-   d[,y.var.reg] 
+  t.ids <-   test.ids 
+  e.ids <- test.ids.exmt 
   offset <- model.offset
   data.set.type <-  'valid'
   
-  
-  
+ 
 row <- 102
 m <- model
 mc <- mc
@@ -1153,7 +1173,7 @@ test <- function(){
 ols.status.variable.range.method <<- function( row.cond ){
   
   
-  # row.cond <-   cnd.bv.lo.ndf.male.pre.ol
+  # row.cond <-  cnd.bv.lo.ndf.Bind.male.pre.ol
   
 if ( !any(row.cond) ) { return (d.reg.in) }
   
@@ -1172,6 +1192,7 @@ for ( v in 1 : length( vars.outlier.ranges ) ){
     
     d.reg.in[  row.cond & ( d.reg.in[, var] > max.value | d.reg.in[, var] < min.value  ) & !is.na(d.reg.in[, var])  , ol.status.range.method.var.name ] <- TRUE
     
+    
 }
   
   return (d.reg.in)
@@ -1179,25 +1200,26 @@ for ( v in 1 : length( vars.outlier.ranges ) ){
 }
 
 
-gen.gg.valid.data <<- function(  model.class , species , breed , ndf.lev , sex  ){
+gen.gg.valid.data <<- function(   species , breed , ndf.lev , sex  ){
   
   test <- function(){
     
     species <- species.cattle
     breed <- 1
-    ndf.lev <- ndf.lev.hi
+    ndf.lev <- ndf.lev.lo
     sex <- sex.female
-    model.class <- 1
     
   }
   
 
-  df <- gen.gg.df.specific( 1 ,  model.class , species , breed, ndf.lev , sex) 
+  df <- gen.gg.df.specific( 1 ,  species , breed, ndf.lev , sex) 
   
-  if (  is.null(df)  ){   df <- gen.gg.df.specific( 2 ,  model.class , species , breed, ndf.lev , sex)  }
-  if (  is.null(df)  ){   df <- gen.gg.df.specific( 3 ,  model.class , species , breed, ndf.lev , sex)  }
+  if (  is.null(df)  ){   df <- gen.gg.df.specific( 2 ,   species , breed, ndf.lev , sex)  }
+  if (  is.null(df)  ){   df <- gen.gg.df.specific( 3 ,  species , breed, ndf.lev , sex)  }
   if (  is.null(df)  ){  return (NULL) }
   
+  
+  tier.2.unq.lab.1rs <- NA ;   tier.3.unq.lab.1rs <- NA
   
   for (  m in 2 : n.mod.form  ){ 
     
@@ -1209,7 +1231,7 @@ gen.gg.valid.data <<- function(  model.class , species , breed , ndf.lev , sex  
     
     #  d.reg.out[ , 'is.NULL']
     
-    df <- rbind( df , gen.gg.df.specific(m ,  model.class , species , breed ,ndf.lev , sex)  )  
+    df <- rbind( df , gen.gg.df.specific(m ,  species , breed ,ndf.lev , sex)  )  
     
     if ( is.null(df)) { next}
     
@@ -1221,9 +1243,14 @@ gen.gg.valid.data <<- function(  model.class , species , breed , ndf.lev , sex  
     
   }
   
-  # all.tiers.unq.lab.1rs <- c( tier.1.unq.lab.1rs ,tier.2.unq.lab.1rs  , tier.3.unq.lab.1rs ) 
-   df$col.mod.form.label.r1 <- factor(   df$col.mod.form.label.r1 , levels = order.labels(all.tiers.unq.lab.1rs )) 
+   all.tiers.unq.lab.1rs <- c( tier.1.unq.lab.1rs ,tier.2.unq.lab.1rs  , tier.3.unq.lab.1rs ) 
+   all.tiers.unq.lab.1rs <-  all.tiers.unq.lab.1rs[ which(  !is.na(all.tiers.unq.lab.1rs))]
+   
+    df$col.mod.form.label.r1 <- factor(   df$col.mod.form.label.r1 , levels = order.labels(all.tiers.unq.lab.1rs )) 
   
+   
+
+   
   return (  df  )
   
   
@@ -1231,9 +1258,9 @@ gen.gg.valid.data <<- function(  model.class , species , breed , ndf.lev , sex  
 
 order.labels <<- function(    labels){
   
-  # test: labels <- unq.lab.1rs 
+  # test: labels <- all.tiers.unq.lab.1rs 
   
-  label.ids <- substr(labels ,3,3 )
+  label.ids <- as.array( str_sub(labels ,-5,-5))
 
   index.rank.1 <- which(label.ids == 'a')
   index.rank.2 <- which(label.ids == 'b')
@@ -1618,7 +1645,7 @@ reg.d.out <<- function(){
 
 gen.var.alias <- function( var ){
   
-#  var <- all.x.vars[c(38)]
+#  var <- all.x.vars[c(8)]
   
  # print(paste('current var is', var))
   
@@ -1674,22 +1701,12 @@ assign.best.model.tier <<- function( r.cond  , d.reg.out ){  # Best among all fo
   rank.2.optim.metric  <- max( na.omit(  d.reg.out[ r.cond &   !(d.reg.out$mod.form %in%   rank.1.mod.formula) ,   optim.metric.ucb ])  )
   rank.2.row.cond <-   r.cond & d.reg.out[,optim.metric.ucb]  ==  rank.2.optim.metric & !is.na( d.reg.out[,optim.metric.ucb]  )   &   !(d.reg.out$mod.form %in%   rank.1.mod.formula)  
   
-  # rank.2.elements <- length(which( rank.2.row.cond == TRUE))
-  
-  # unique.form <- unique(d.reg.out[rank.2.row.cond , 'mod.form'])  
-  
-  # if (  rank.2.elements > n.folds ){    rank.2.row.cond <- rank.2.row.cond[     rank.2.row.cond &   which( d.reg.out[, 'mod.form'] ==   unique.form[1] )   ]     }
-  
-  
   rank.2.mod.vers <-  d.reg.out[which(   rank.2.row.cond    ) , 'mod.vers']
   rank.2.mod.formula <- d.reg.out[which(   rank.2.row.cond  ) , 'mod.form']
   
   # Third best ranked variant
   rank.3.optim.metric  <- max( na.omit(  d.reg.out[ r.cond &   !(d.reg.out$mod.form %in%   rank.1.mod.formula)  &  !(d.reg.out$mod.form %in%   rank.2.mod.formula) ,   optim.metric.ucb ])  )
   rank.3.row.cond <- d.reg.out[,optim.metric.ucb]  ==  rank.3.optim.metric  & !is.na( d.reg.out[,optim.metric.ucb]  )  
-  
-  # optim.mod.vers <-  d.reg.out[  optim.mod.vers.form.indx, 'mod.vers' ] 
-  # optim.mod.form <-  d.reg.out[  optim.mod.vers.form.indx, 'mod.form' ] 
   
   # Assignments
   d.reg.out[    rank.1.row.cond , vn.tier.rank ] <- 1
@@ -1714,7 +1731,7 @@ assign.best.model.tier <<- function( r.cond  , d.reg.out ){  # Best among all fo
 
 assign.best.model <<- function( r.cond  , d.reg.out , optimum.type ){  # Best among all formulae in class
   
-  # test: r.cond <- ss.best.glob.cond ; assignment.variable <- vn.best.global
+  # test: r.cond <- ss.best.glob.cond ; assignment.variable <- vn.best.global ;  optimum.type <- 'formula' 
   
   
   optim.metric <- max( na.omit(  d.reg.out[  r.cond ,   optim.metric.ucb  ] )  )
@@ -2061,27 +2078,44 @@ gen.gg.model.label <<- function( rank , cur.mod , mc){
 }
 
 
-gen.gg.model.label.new <<- function( rank , cur.mod , mc){
+gen.gg.model.label.new <<- function( breed, ndf , sex ,rank , cur.mod , mc){
   
-  # test: rank <- 3; cur.mod <- 6 ; mc <- 1
+  # test: breed <- 1 ; ndf <- ndf.lev.lo ; sex <- sex.male ; rank <- 3; cur.mod <- 6 ; mc <- 1
+  
+  # STRATA LABEL
+  
+  # Breed
+  if ( breed == breed.indig){   strata.lab <- 'Bos.i'   }
+  if ( breed == breed.cbred){   strata.lab <- 'Exot'   }
+  
+  # Forage
+  if ( ndf == ndf.lev.lo ){   strata.lab <- str_c(  strata.lab , '-LoF' )  }
+  if ( ndf == ndf.lev.hi ){   strata.lab <- str_c(  strata.lab , '-HiF' )  }
+  
+  # Sex
+  if ( sex == sex.male ){   strata.lab <- str_c(  strata.lab , '-Ma:' )  }
+  if ( sex == sex.female){   strata.lab <- str_c(  strata.lab , '-Fe:' )  }
   
   
+ 
   # Define tier (1 to 3) 
-  if (cur.mod %in%  c(1,2,3) ){  label <- "T1"  }
-  if (cur.mod %in%  c(4,5,6) ){  label <- "T2"  }
-  if (cur.mod %in%  c(7,8,9) ){  label <- "T3" }
+  if (cur.mod %in%  c(1,2,3) ){  mod.lab <- "1"  }
+  if (cur.mod %in%  c(4,5,6) ){  mod.lab <- "2"  }
+  if (cur.mod %in%  c(7,8,9) ){  mod.lab <- "3" }
   
   
   # Define rank within tier (1 to 3)
-  if ( rank == 1){   label <- str_c( label , "a") }
-  if ( rank  == 2){   label <- str_c( label , "b") }
-  if ( rank == 3){   label <- str_c( label , "c") }
+  if ( rank == 1){    mod.lab  <- str_c( mod.lab , "a") }
+  if ( rank  == 2){   mod.lab <- str_c( mod.lab , "b") }
+  if ( rank == 3){   mod.lab  <- str_c( mod.lab , "c") }
   
   
   # Add model class as suffix (after dash '-)
-  if (  mc == model.class.GBR ){    label <- str_c( label , "-GrB")  }
-  if (  mc == model.class.ME  ){   label <- str_c( label , "-Mxd")  }
+  if (  mc == model.class.GBR ){     mod.lab <- str_c( mod.lab , "-GrB")  }
+  if (  mc == model.class.ME  ){    mod.lab <- str_c( mod.lab , "-Mxd")  }
   
+  
+  label <- str_c( strata.lab , mod.lab )
   
   return (label)
 }
@@ -2091,8 +2125,6 @@ extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars 
   
   # sample <- 'whole' ; mc <- mc ; model <- ws.model ; row.cond <- mod.vers.form.condition ; data <- d.reg.out ; VIF.dat <- VIF.dat
   
-
-
   #  data <- bs.dat  ; sample <- 'boot'  ;  model <-  bs.model  ; mc <- mc  ; row.cond <- bs.dat.r.cond  ; x.vars <- bs.x.vars  ; x.vars.se <- x.vars.se  ; VIF.dat  <-  NULL 
   
   
@@ -2100,22 +2132,23 @@ extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars 
   
   for (  main.var in pred.vars  ) {
     
-    # test: main.var <-  pred.vars[2]
+    # test: main.var <-  pred.vars[3]
     
     ordered.var.names <- extract.ordered.vars(  main.var , model, mc)
     
-    
-
+  
     if ( main.var == pred.var.BW ) {  var.list <-  v.list.BW ; coef.se.var.list <- vns.coef.se.ws.BW  ; vif.vars <- vn.VIF.bw    ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.BW  ; sign.var.list <- vns.coef.sign.ws.BW  } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.BW  }
-    } else if( main.var == pred.var.ADG ) { var.list <- v.list.ADG ; coef.se.var.list <- vns.coef.se.ws.ADG  ; vif.vars <- vn.VIF.ADG  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.ADG ; sign.var.list <- vns.coef.sign.ws.ADG } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.ADG }
-    } else if( main.var == pred.var.MY ) { var.list <- v.list.MY ; coef.se.var.list <- vns.coef.se.ws.MY ; vif.vars <- vn.VIF.MY  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.MY ; sign.var.list <- vns.coef.sign.ws.MY} else if (sample == "boot"){ coef.var.list <- vns.coef.bs.MY }
-    } else if( main.var == pred.var.GES ) { var.list <- v.list.GES ; coef.se.var.list <- vns.coef.se.ws.GES  ; vif.vars <- vn.VIF.GES  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.GES ; sign.var.list <- vns.coef.sign.ws.GES } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.GES }
-    } else if( main.var == pred.var.NDF ) {var.list <- v.list.NDF ;  coef.se.var.list <- vns.coef.se.ws.NDF ; vif.vars <- vn.VIF.NDF  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.NDF ; sign.var.list <- vns.coef.sign.ws.NDF } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.NDF }
-    } else if( main.var == pred.var.ADF ) {var.list <- v.list.ADF ; coef.se.var.list <- vns.coef.se.ws.ADF ; vif.vars <- vn.VIF.ADF  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.ADF  ; sign.var.list <- vns.coef.sign.ws.ADF } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.ADF }
-    }else if( main.var == pred.var.CP ) {var.list <- v.list.CP ; coef.se.var.list <- vns.coef.se.ws.CP  ; vif.vars <- vn.VIF.CP  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.CP ; sign.var.list <- vns.coef.sign.ws.CP } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.CP }
-    }else if( main.var == pred.var.EE ) {var.list <- v.list.EE ; coef.se.var.list <- vns.coef.se.ws.EE  ; vif.vars <- vn.VIF.EE  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.EE ; sign.var.list <- vns.coef.sign.ws.EE } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.EE }
-    }else if( main.var == pred.var.Ash ) {var.list <- v.list.Ash ; coef.se.var.list <- vns.coef.se.ws.Ash ; vif.vars <- vn.VIF.Ash  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.Ash  ; sign.var.list <- vns.coef.sign.ws.Ash } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.Ash }
-    }else if( main.var == pred.var.ADL ) {var.list <- v.list.ADL ; coef.se.var.list <- vns.coef.se.ws.ADL  ; vif.vars <- vn.VIF.ADL  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.ADL ; sign.var.list <- vns.coef.sign.ws.ADL } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.ADL }
+    } else if ( main.var == pred.var.MBW) {  var.list <-  v.list.MBW ; coef.se.var.list <- vns.coef.se.ws.MBW  ; vif.vars <- vn.VIF.mbw    ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.MBW ; sign.var.list <- vns.coef.sign.ws.MBW  } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.MBW  }
+    } else if ( main.var == pred.var.BW.fM  ) {  var.list <-  v.list.BW.fM ; coef.se.var.list <- vns.coef.se.ws.BW_fM  ; vif.vars <- vn.VIF.bw_fM   ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.BW_fM ; sign.var.list <- vns.coef.sign.ws.BW_frac_Mat  } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.BW_fM  }
+    } else if ( main.var == pred.var.ADG ) { var.list <- v.list.ADG ; coef.se.var.list <- vns.coef.se.ws.ADG  ; vif.vars <- vn.VIF.ADG  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.ADG ; sign.var.list <- vns.coef.sign.ws.ADG } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.ADG }
+    } else if ( main.var == pred.var.MY ) { var.list <- v.list.MY ; coef.se.var.list <- vns.coef.se.ws.MY ; vif.vars <- vn.VIF.MY  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.MY ; sign.var.list <- vns.coef.sign.ws.MY} else if (sample == "boot"){ coef.var.list <- vns.coef.bs.MY }
+    } else if ( main.var == pred.var.GES ) { var.list <- v.list.GES ; coef.se.var.list <- vns.coef.se.ws.GES  ; vif.vars <- vn.VIF.GES  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.GES ; sign.var.list <- vns.coef.sign.ws.GES } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.GES }
+    } else if ( main.var == pred.var.NDF ) {var.list <- v.list.NDF ;  coef.se.var.list <- vns.coef.se.ws.NDF ; vif.vars <- vn.VIF.NDF  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.NDF ; sign.var.list <- vns.coef.sign.ws.NDF } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.NDF }
+    } else if ( main.var == pred.var.ADF ) {var.list <- v.list.ADF ; coef.se.var.list <- vns.coef.se.ws.ADF ; vif.vars <- vn.VIF.ADF  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.ADF  ; sign.var.list <- vns.coef.sign.ws.ADF } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.ADF }
+    }else if ( main.var == pred.var.CP ) {var.list <- v.list.CP ; coef.se.var.list <- vns.coef.se.ws.CP  ; vif.vars <- vn.VIF.CP  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.CP ; sign.var.list <- vns.coef.sign.ws.CP } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.CP }
+    }else if ( main.var == pred.var.EE ) {var.list <- v.list.EE ; coef.se.var.list <- vns.coef.se.ws.EE  ; vif.vars <- vn.VIF.EE  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.EE ; sign.var.list <- vns.coef.sign.ws.EE } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.EE }
+    }else if ( main.var == pred.var.Ash ) {var.list <- v.list.Ash ; coef.se.var.list <- vns.coef.se.ws.Ash ; vif.vars <- vn.VIF.Ash  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.Ash  ; sign.var.list <- vns.coef.sign.ws.Ash } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.Ash }
+    }else if ( main.var == pred.var.ADL ) {var.list <- v.list.ADL ; coef.se.var.list <- vns.coef.se.ws.ADL  ; vif.vars <- vn.VIF.ADL  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.ADL ; sign.var.list <- vns.coef.sign.ws.ADL } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.ADL }
 
     }else if( main.var == pred.var.NDF_Dig) {var.list <- v.list.NDF.dig ; coef.se.var.list <- vns.coef.se.ws.NDF_Dig  ; vif.vars <- vn.VIF.NDF_Dig  ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.NDF_Dig } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.NDF_Dig }
     }else if( main.var == pred.var.OM_Dig ) {var.list <- v.list.OM.dig ;  coef.se.var.list <- vns.coef.se.ws.OM_Dig ; vif.vars <- vn.VIF.OM_Dig ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.OM_Digest  } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.OM_Dig }

@@ -1,7 +1,6 @@
 
 
 
-
 source.all() # Refresh - reload all workspace components
 
 
@@ -10,6 +9,16 @@ CV.prep() # Prepare data frame to store k-fold CV results
 
 formulae.defs() # Define formulae
 
+
+d.reg.out$formula
+d.reg.out$fold
+d.reg.out$mod.class
+
+d.reg.out$R2.weighted
+
+d.reg.out[  is.na(d.reg.out$R2.weighted) , 'breed']  d.reg.out$breed
+
+d.reg.out$rank.among.tier
 
 
 
@@ -22,11 +31,11 @@ if (r == 1) { d.reg.out <- d.reg.out.null ; start.time <- Sys.time()}
 
 if (FALSE){
   
-r <- 102
+r <- 145
 
 }
 
-  #if ( r == 101 ){ break }
+  # if ( r == 145 ){ break }
 
 {
 
@@ -223,7 +232,10 @@ total.animal.sample <- 0 ; total.experiment.sample <- 0 ; total.treatment.sample
 
 for (s.r in 1 : nrow(all.data) ){ 
   
+  # Test: s.r <- 1
+  
 total.animal.sample <- total.animal.sample + all.data[s.r , 'Sample.size'] 
+
 
 }
 
@@ -491,7 +503,7 @@ if ( k == n.folds ) { # If current fold is last of all folds, calculate average 
  
   
   # Upper confidence bound
-  mean.r2 <- mean(na.omit(d.reg.out[ r.cnd.ss.mf.mv  , vn.test.w.r2]))
+  mean.r2 <- mean(na.omit(  d.reg.out[ r.cnd.ss.mf.mv  , vn.test.w.r2]  ))
   sd.r2 <- sd(na.omit(d.reg.out[ r.cnd.ss.mf.mv  , vn.test.w.r2]))
   
   d.reg.out[r.cnd.ss.mf.mv, vn.w.R2.ucb.ur ] <- gen.upper.confidence.bound(    mean.r2  ,  sd.r2) 
@@ -636,7 +648,9 @@ reg.d.out()
 } # k-fold Cross-validation
 
 
+d.reg.out$rank.among.tier
 
+d.reg.out[ is.na(d.reg.out$w.R2.ucb.ur),'ndf']
 
 reg.d.out()
 
