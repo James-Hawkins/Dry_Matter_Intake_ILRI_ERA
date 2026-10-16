@@ -100,7 +100,7 @@ max.m.stops <<- c( 1500 , 1500 , 1500 , 1500)
 
 # QUALITY CONTROL (outlier control)
 remove.outliers <<- TRUE # If true, removes outliers using two methods
-remove.outliers.range.method <<- TRUE
+remove.outliers.range.method <<- FALSE
 remove.outliers.residual.method <<- TRUE
 
 
