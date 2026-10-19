@@ -343,8 +343,9 @@ print(' Creating validation plots ')
   gg.gbr.y.valid.bv.lon.Bind.male.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.2,]), silent = TRUE)
   
   
-  gg.gbr.y.valid.bv.lon.Bind.male.0.tier.3 <- try(  gen.gg.valid(gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.3,] )   , silent = TRUE)
+  gg.gbr.y.valid.bv.lon.Bind.male.0.tier.3 <- try(  gen.gg.valid(  gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier == tier.label.3,]  )   , silent = TRUE)
   
+
   
   # Female
   if (  n.sexes == 2 ){

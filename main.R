@@ -10,18 +10,6 @@ CV.prep() # Prepare data frame to store k-fold CV results
 formulae.defs() # Define formulae
 
 
-d.reg.out$formula
-d.reg.out$fold
-d.reg.out$mod.class
-
-d.reg.out$R2.weighted
-
-d.reg.out[  is.na(d.reg.out$R2.weighted) , 'breed']  d.reg.out$breed
-
-d.reg.out$rank.among.tier
-
-
-
 
 for ( r in 1 : (  nrow(d.reg.out.null)  )  ){
   
@@ -31,11 +19,11 @@ if (r == 1) { d.reg.out <- d.reg.out.null ; start.time <- Sys.time()}
 
 if (FALSE){
   
-r <- 145
+r <- 289
 
 }
 
-  # if ( r == 145 ){ break }
+  #if ( r == 289 ){ break }
 
 {
 
@@ -56,7 +44,9 @@ mt <-  d.reg.out[ r , vn.tier]
 formula <- de.listify( d.reg.out[r,vn.formula])
 
 
-print( paste( 'Iteration' ,r , 'of', nrow(d.reg.out) , 'for model', mv , 'and sub-sample: ', breed.labels[breed] , '/'  , ndf.levs[which(ndf == ndf.levs)] , 'NDF, ' , sex.labels[sex]    ) )
+
+sub.sample.text <- print(paste( breed.labels[breed] , '/'  , ndf.levs[which(ndf == ndf.levs)] , 'NDF, ' , sex.labels[sex]    ))
+print( paste( 'Iteration' ,r , 'of', nrow(d.reg.out) , 'for model', mv , 'and sub-sample: ',sub.sample.text  ) )
 
 
 cond.ss <-  ( 
@@ -95,12 +85,17 @@ cur.t.id.list <- de.listify( d.reg.out[r, vn.all.treatment.IDs  ] )
 if (  fold.by.exp  ){  
   
 cur.e.id.list <- de.listify( d.reg.out[r, vn.all.experiment.IDs ] )  
-#cur.t.id.list <- d.reg.in[d.reg.in$ue.id %in% cur.e.id.list , 'ut.id'] 
 num.exp.units <- length( cur.e.id.list )
 
-if (num.exp.units  <= min.e.units ) { 
+if (  num.exp.units  <= min.e.units ) { 
+  
   print(paste('Skipping iteration due to insufficient sample size ' , r )) 
   d.reg.out[r, vn.iter.is.NULL ] <- TRUE
+  
+  # Add error message to list of error messages
+  error.message <- print( paste('ATTN: insufficient sample with formula:' , mf ,  ' and sub-sample:' , sub.sample.text  ))
+  
+  error.msgs <- append( error.msgs , error.message  )
   next 
 }
 
@@ -120,7 +115,14 @@ cc.e.id.list <- d.reg.in[ which(d.reg.in$ut.id %in% gen.complete.cases(    cur.t
 if (   length(cc.e.id.list ) <= ( 2 * n.folds)  ) { 
   
   print(paste('Skipping iteration due to insufficient sample size ' , r )) 
+  
+  
   d.reg.out[r, vn.iter.is.NULL ] <- TRUE
+  
+  # Add error message to list of error messages
+  error.message <- print( paste('ATTN: insufficient sample with formula:' , mf ,  ' and sub-sample:' , sub.sample.text  ))
+  
+  error.msgs <- append( error.msgs , error.message  )
   next 
   
   }
@@ -383,7 +385,7 @@ if (mc == model.class.GBR ){
 
 
 # Get variable coefficients
-d.reg.out <- extract.coefficients(  d.reg.out , 'whole' , ws.model , mc , mod.vers.form.condition , x.vars , x.vars.se  , VIF.dat ,total.animal.sample )
+d.reg.out <- extract.coefficients(  d.reg.out , 'whole' , ws.model , mc , mod.vers.form.condition , x.vars , x.vars.se  , VIF.dat , total.animal.sample )
 
 
 
@@ -636,6 +638,27 @@ if ( r == nrow(d.reg.out)){
 time.elapsed <-  (Sys.time() - start.time)/60
 print(paste('Evaluation completed in ' , round(time.elapsed ,1), ' minutes.'))
 
+
+if (   length( error.msgs ) > 0  ){ 
+  
+  error.msgs <- unique(  error.msgs )
+  
+  writeLines('ERRORS: \n\n\n')
+  
+  for (e in 1 : length(error.msgs )  ){
+    
+    msg <- de.listify(de.listify( error.msgs[e] ) )
+    
+    print(  msg )
+    
+  }
+  
+  
+  
+  
+  }
+
+
 reg.d.out()
 
 
@@ -649,9 +672,35 @@ reg.d.out()
 
 
 
-d.reg.out[d.reg.out$mod.form == 7 , ]
 
 
+
+
+
+d.reg.out[ d.reg.out$ndf == ndf.lev.lo & d.reg.out$breed == breed.indig  & d.reg.out$mod.form == 7  &  is.na(d.reg.out$R2) , 'loop.iter']
+
+d.reg.out$
+
+d.reg.out[d.reg.out$mod.form == 7 &  is.na(d.reg.out$w.R2.ucb.ur) , 'ndf']
+d.reg.out[d.reg.out$mod.form == 8 &  is.na(d.reg.out$w.R2.ucb.ur) , 'ndf']
+
+
+d.reg.out$R2
+
+d.reg.out[
+  
+  d.reg.out$ndf == ndf.lev.lo & d.reg.out$breed == breed.indig & 
+  
+  d.reg.out$mod.form == 9   , 'rank.among.tier']
+
+
+
+d.reg.out[d.reg.out$mod.form == 9  , 'w.R2.ucb.ur']
+
+
+
+
+d.reg.out$
 
 d.reg.out$rank.among.tier
 

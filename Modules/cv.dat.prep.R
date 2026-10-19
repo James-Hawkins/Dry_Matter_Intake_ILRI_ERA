@@ -599,6 +599,8 @@ if (reg.wt.method.quartic.root) { d.reg.in$reg.weight <- d.reg.in$reg.wt.quartic
   
   d.reg.out.null <<- d.reg.out
   
+  error.msgs <<- list()
+  
 } # Data pre processing
 
 

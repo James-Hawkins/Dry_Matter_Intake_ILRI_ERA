@@ -8,7 +8,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 
 
-source(   'Settings/libraries.R')  ;  source( 'Settings/parameters.R')  ; source( 'Settings/variables.R') ; source( 'Settings/lists.R') ; source(  str_c(  helpers.dir   ,'functions.R') )   
+source(   'Settings/libraries.R')  ;  source( 'Settings/variables.R') ; source( 'Settings/lists.R') ; source(  str_c(  helpers.dir   ,'functions.R') )   
 
 
 d.raw <<- read_excel( 
@@ -95,9 +95,9 @@ d$breed.type <- NA
 
 
 # For cattle, breeds are categorized into purebred Bos indicus (1) and Crossbred Bos indicus x Bos taurus or Purebred Bos taurus (2)
-d[!is.na(d$Breed.type.cattle  ) &  d$Species == species.cattle & d$Species == species.cattle & d$Breed.type.cattle == "bos.indicus" , 'breed.type'] <- breed.indig
-d[!is.na(d$Breed.type.cattle  ) &  d$Species == species.cattle & d$Species == species.cattle & d$Breed.type.cattle == "cross.bred" , 'breed.type'] <- breed.cbred
-d[!is.na(d$Breed.type.cattle  ) &  d$Species == species.cattle & d$Species == species.cattle & d$Breed.type.cattle == "pure.bred.exotic" , 'breed.type'] <- breed.cbred
+d[!is.na(d$Breed.type.cattle  )  & d$Species == species.cattle & d$Breed.type.cattle == "bos.indicus" , 'breed.type'] <- breed.indig
+d[!is.na(d$Breed.type.cattle  ) & d$Species == species.cattle & d$Breed.type.cattle == "cross.bred" , 'breed.type'] <- breed.cbred
+d[!is.na(d$Breed.type.cattle  )  & d$Species == species.cattle & d$Breed.type.cattle == "pure.bred.exotic" , 'breed.type'] <- breed.cbred
 
 d[ !is.na(d$Breed.type.sheep  ) &  d$Species == species.sheep & d$Breed.type.sheep == "indigenous" , 'breed.type'] <- breed.indig
 d[ !is.na(d$Breed.type.sheep  ) &  d$Species == species.sheep & d$Breed.type.sheep == "cross.bred" , 'breed.type'] <- breed.cbred
@@ -149,9 +149,13 @@ d[ !is.na(d$NDF_nutrition) & d$Species == species.goat & d$NDF_nutrition > ndf.t
 
 
 
-# Bovines
-d[ !is.na(d$NDF_nutrition) & d$Species == species.goat & d$NDF_nutrition <= ndf.thresh.goat , 'ndf.level'] <- ndf.lev.lo
-d[ !is.na(d$NDF_nutrition) & d$Species == species.goat & d$NDF_nutrition > ndf.thresh.goat, 'ndf.level'] <- ndf.lev.hi
+# BOVINES
+mean( d[   d$breed.type == breed.indig & d$Species == species.cattle &  !is.na(d$NDF_nutrition) , 'NDF_nutrition']  )  
+mean( d[   d$breed.type == breed.cbred & d$Species == species.cattle & !is.na(d$NDF_nutrition)  , 'NDF_nutrition']  )  
+
+
+median( d[   d$breed.type == breed.indig & d$Species == species.cattle &  !is.na(d$NDF_nutrition) , 'NDF_nutrition']  )  
+median( d[   d$breed.type == breed.cbred & d$Species == species.cattle & !is.na(d$NDF_nutrition)  , 'NDF_nutrition']  )  
 
 
 
@@ -185,11 +189,16 @@ for ( b.code in unique.b.codes   ){
   
   mean.NDF <- mean( d[ !is.na(d$NDF_nutrition) & d$B.Code == b.code  , 'NDF_nutrition'] )
 
-  if ( mean.NDF <= ndf.thresh.cattle) { 
+  breed <- d[!is.na(d$NDF_nutrition) & d$B.Code == b.code  , 'breed.type' ][1] 
+  
+  if ( breed == breed.indig ) { ndf.threshold <-  ndf.thresh.cattle.bos.ind }
+  if ( breed == breed.cbred ) { ndf.threshold <-  ndf.thresh.cattle.exot }
+  
+  if ( mean.NDF <= ndf.threshold) { 
     
     d[ d$B.Code == b.code  , 'ndf.level'] <- ndf.lev.lo
     
-    } else if ( mean.NDF > ndf.thresh.cattle) { 
+    } else if ( mean.NDF > ndf.threshold ) { 
       
       d[ d$B.Code == b.code  , 'ndf.level'] <- ndf.lev.hi
       

@@ -21,7 +21,7 @@ de.listify <<- function( d ){
 
 gen.gg.df.specific <<- function(  cur.mod , species , breed , ndf , sex){
   
-  # cur.mod <- 2; vers <- 'pmetric' ; mc <- 1 ; species <- species.cattle ; breed <- breed.indig
+  # cur.mod <- 7; vers <- 'pmetric' ; mc <- 1 ; species <- species.cattle ; breed <- breed.indig
   
   # cur.mod <- 1 ; vers <- 'n.pmetric'
   
@@ -104,7 +104,7 @@ gen.gg.df.specific <<- function(  cur.mod , species , breed , ndf , sex){
     
     
     
-      tier.rank <- unique( d.reg.out[
+      tier.rank <- unique(  d.reg.out[
       
       (
       r.cond 
@@ -960,8 +960,6 @@ rank.residual.outliers <- function( d ,  rsds  , row ){
 }
 
 
-
-
 gen.reg.model <- function(  data , form   , mod.v      ){
   
 test <- function(){
@@ -1501,11 +1499,11 @@ gen.complete.cases <<- function( id.list , formla ){
     , 'Sample.size'
     ) 
   
-  df.ss <- d.reg.in[  d.reg.in$ut.id %in% id.list , all.vars.plus.meta.d ] 
+  df.ss <- d.reg.in[  d.reg.in$ut.id %in% id.list , all.vars.plus.meta.d ]
   
   new.id.list <- df.ss[  complete.cases(df.ss)  ,'ut.id' ]
   
-  return (new.id.list)
+  return (  new.id.list  )
   
 }
 
@@ -1877,7 +1875,6 @@ rev.tform.y <<- function(form.lhs , ws.predicted){
 
 
 
-
 gb.boostrap.se <- function(  bs.d.reg.ina , bs.form , mod.vers , mod.vers.form.condition  , anim.samp   ){
   
   
@@ -2013,6 +2010,8 @@ stat.significance <- function( coef, se , anim.samp , k ){
   # sign <- ifelse( !between(  0 , ( coef - range.90.pca ) , ( coef + range.90.pca  ) ) , 90 , 0)
   
   
+  if (coef == 0) { return ('ns' ) }
+  
   t.stat <-  abs( coef)  / se 
   
   #   t.stat <-  -6.3	/ 3.9
@@ -2051,33 +2050,6 @@ assign.sign <<- function( data , r ){
 }
 
 
-gen.gg.model.label <<- function( rank , cur.mod , mc){
-  
-  # test: rank <- 3; cur.mod <- 6 ; mc <- 1
-  
-  
-  # Define model class
-  if (  mc == model.class.GBR ){   label <- "G" }
-  if (  mc == model.class.ME  ){   label <- "M" }
-  
-  
-  # Define tier (1 to 3) 
-  if (cur.mod %in%  c(1,2,3) ){  label <- str_c( label , "1")  }
-  if (cur.mod %in%  c(4,5,6) ){  label <- str_c( label , "2")  }
-  if (cur.mod %in%  c(7,8,9) ){  label <- str_c( label , "3")  }
-  
-  
-  # Define rank within tier (1 to 3)
-  if ( rank == 1){   label <- str_c( label , "a") }
-  if ( rank  == 2){   label <- str_c( label , "b") }
-  if ( rank == 3){   label <- str_c( label , "c") }
-  
-  
-  
-  return (label)
-}
-
-
 gen.gg.model.label.new <<- function( breed, ndf , sex ,rank , cur.mod , mc){
   
   # test: breed <- 1 ; ndf <- ndf.lev.lo ; sex <- sex.male ; rank <- 3; cur.mod <- 6 ; mc <- 1
@@ -2085,16 +2057,16 @@ gen.gg.model.label.new <<- function( breed, ndf , sex ,rank , cur.mod , mc){
   # STRATA LABEL
   
   # Breed
-  if ( breed == breed.indig){   strata.lab <- 'Bos-i'   }
-  if ( breed == breed.cbred){   strata.lab <- 'Exot'   }
+  if ( breed == breed.indig){   strata.lab <- 'Bos-i/'   }
+  if ( breed == breed.cbred){   strata.lab <- 'Exot/'   }
   
   # Forage
-  if ( ndf == ndf.lev.lo ){   strata.lab <- str_c(  strata.lab , '-LoFo' )  }
-  if ( ndf == ndf.lev.hi ){   strata.lab <- str_c(  strata.lab , '-HiFo' )  }
+  if ( ndf == ndf.lev.lo ){   strata.lab <- str_c(  strata.lab , 'LoFo/' )  }
+  if ( ndf == ndf.lev.hi ){   strata.lab <- str_c(  strata.lab , 'HiFo/' )  }
   
   # Sex
-  if ( sex == sex.male ){   strata.lab <- str_c(  strata.lab , '-Ma : ' )  }
-  if ( sex == sex.female){   strata.lab <- str_c(  strata.lab , '-Fe : ' )  }
+  if ( sex == sex.male ){   strata.lab <- str_c(  strata.lab , 'Ma : ' )  }
+  if ( sex == sex.female){   strata.lab <- str_c(  strata.lab , 'Fe : ' )  }
   
   
  
@@ -2123,7 +2095,7 @@ gen.gg.model.label.new <<- function( breed, ndf , sex ,rank , cur.mod , mc){
 extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars , x.vars.se , VIF.dat , anim.samp ){
   
   
-  # sample <- 'whole' ; mc <- mc ; model <- ws.model ; row.cond <- mod.vers.form.condition ; data <- d.reg.out ; VIF.dat <- VIF.dat
+  # sample <- 'whole' ; mc <- mc ; model <- ws.model ; row.cond <- mod.vers.form.condition ; data <- d.reg.out ; VIF.dat <- VIF.dat  ; anim.samp <- total.animal.sample 
   
   #  data <- bs.dat  ; sample <- 'boot'  ;  model <-  bs.model  ; mc <- mc  ; row.cond <- bs.dat.r.cond  ; x.vars <- bs.x.vars  ; x.vars.se <- x.vars.se  ; VIF.dat  <-  NULL 
   
@@ -2136,7 +2108,7 @@ extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars 
     
     ordered.var.names <- extract.ordered.vars(  main.var , model, mc)
     
-    print(paste('running variable' ,main.var ))
+    # print(paste('running variable' ,main.var ))
     
   
     if ( main.var == pred.var.BW ) {  var.list <-  v.list.BW ; coef.se.var.list <- vns.coef.se.ws.BW  ; vif.vars <- vn.VIF.bw    ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.BW  ; sign.var.list <- vns.coef.sign.ws.BW  } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.BW  }

@@ -8,8 +8,6 @@ source.all <- function(){
   
   source(  str_c(  'Settings/' ,'libraries.R') )  
   
-  source(  str_c(  'Settings/'    ,'parameters.R') )
-  
   source(  str_c( settings.dir    ,'variables.R') )
   
   source(  str_c( settings.dir    ,'lists.R') )
@@ -18,7 +16,7 @@ source.all <- function(){
   
   source(  str_c(  settings.dir   ,'model.specs.R') )  
   
-    source('data.prep.R')
+  source('data.prep.R')
   
   
   # Data prep

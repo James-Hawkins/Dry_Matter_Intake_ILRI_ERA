@@ -100,11 +100,12 @@ max.m.stops <<- c( 1500 , 1500 , 1500 , 1500)
 
 # QUALITY CONTROL (outlier control)
 remove.outliers <<- TRUE # If true, removes outliers using two methods
-remove.outliers.range.method <<- FALSE
+remove.outliers.range.method <<- TRUE
 remove.outliers.residual.method <<- TRUE
 
 
-cutoff.ol.s.residual.method <<- 2.5
+cutoff.ol.s.residual.method <<- 3.5 # Number of standard deviations in regression residual for which higher values get omitted from sample
+
 
 
 #' ordering
@@ -146,6 +147,8 @@ outlier.range.maximum.sr <<- c(
 )
 
 #' ordering
+vars.outlier.ranges
+
 
 # Bovines
 outlier.range.minimum.bv <<- c(
