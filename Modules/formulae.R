@@ -8,19 +8,7 @@ if (FALSE){
   
 
   # SELECT WHICH SAMPLE YOU ARE WORKING WITH
-  #current.ds.ids <- ue.ids.sp.lo.ndf.male
-  #current.ds.ids <- ue.ids.sp.lo.ndf.female
-
-  #current.ds.ids <- ue.ids.sp.hi.ndf.male
-  #current.ds.ids <- ue.ids.sp.hi.ndf.female
-
-  #current.ds.ids <- ue.ids.gt.lo.ndf.male
-  #current.ds.ids <- ue.ids.gt.lo.ndf.female
-
-  #current.ds.ids <- ue.ids.gt.hi.ndf.male
-  #current.ds.ids <- ue.ids.gt.hi.ndf.female
-
-# Cattle
+  # Cattle
 
   current.ds.ids <- ue.ids.bv.lo.ndf.Bind.male 
   current.ds.ids <- ue.ids.bv.lo.ndf.Btau.male 
@@ -33,7 +21,6 @@ if (FALSE){
 
   current.ds.ids <- ue.ids.bv.hi.ndf.Bind.female 
   current.ds.ids <- ue.ids.bv.hi.ndf.Btau.female 
-
 
 
 {
@@ -99,25 +86,84 @@ all.x.vars
 x.vars.reg  <- c(
      
   
-  "bw_kg"   
-  ,"adg_kg_day"  
   
+  # Tier 1 - Animal only 
+  # "bw_kg"   
+     "adg_kg_day"  
+  # , "adg_kg_day.sqd"
+      #  ,   "Met_bw_kg"
+     ,   "BW_frac_Mat"
+  
+  # If female -- milk yield
   #  ,"milk_prod_kg_d" 
-  # ,"is_gestating"  
-   ,"NDF_nutrition.sqt" 
-  #  , "ADF_nutrition" 
-  #  ,"CP_nutrition"  
-  #  ,"NDF_digest"   
-  # ,"EE_nutrition"  
-     ,"Ash_nutrition" 
-  # , "ADL_nutrition" 
-  #  ,"NDF_digest"  
-  #,"OM_digest" 
-#,"DM_digest"
+  
+  
+  # Tier 2 - Diet chemical comp.
+   , "NDF_nutrition" 
+   #  , "ADF_nutrition" 
+   ,"CP_nutrition"  
+   ,"EE_nutrition"  
+    ,"Ash_nutrition" 
+  #  , "ADL_nutrition" 
+  
+  
+  # Tier 3 - Advanced diet chemical comp. + digestibilities
+
+  # Digestibility values
+    ,"NDF_digest"  
+  # ,"OM_digest" 
+  # ,"DM_digest"
+  
+  
+  # Transformations of main DCC variables
+  , "NDF_nutrition.e25" 
+  , "NDF_nutrition.sqt" 
+  , "NDF_nutrition.e75" 
+  , "NDF_nutrition.sqd" 
+  , "NDF_nutrition.cbd" 
+  , "NDF_nutrition.log" 
+  
+  , "CP_nutrition.e25" 
+  , "CP_nutrition.sqt" 
+  , "CP_nutrition.e75" 
+  , "CP_nutrition.sqd" 
+  , "CP_nutrition.cbd" 
+  , "CP_nutrition.log" 
+  
+  #  , "ADF_nutrition.e25" 
+  # , "ADF_nutrition.sqt" 
+  # , "ADF_nutrition.e75" 
+  # , "ADF_nutrition.sqd" 
+  # , "ADF_nutrition.cbd" 
+  # , "ADF_nutrition.log" 
+  
+  , "EE_nutrition.e25" 
+  , "EE_nutrition.sqt" 
+  , "EE_nutrition.e75" 
+  , "EE_nutrition.sqd" 
+  , "EE_nutrition.cbd" 
+  , "EE_nutrition.log" 
+  
+  , "Ash_nutrition.e25" 
+  , "Ash_nutrition.sqt" 
+  , "Ash_nutrition.e75" 
+  , "Ash_nutrition.sqd" 
+  , "Ash_nutrition.cbd" 
+  , "Ash_nutrition.log" 
+  
+  #  , "ADL_nutrition.e25" 
+  # , "ADL_nutrition.sqt" 
+  # , "ADL_nutrition.e75" 
+  # , "ADL_nutrition.sqd" 
+  #  , "ADL_nutrition.cbd" 
+  # #  , "ADL_nutrition.log" 
+  
+
    )
    
    
 
+{
 for (x in x.vars.reg   ){
      
      if (x == x.vars.reg[1]) { formula <- paste(    "feed_intake_g_d  ~ ", x.vars.reg[1]) ; next}
@@ -134,7 +180,7 @@ for (x in x.vars.reg   ){
     
     }
      
-} # Generate formula 
+} 
    
     
     
@@ -142,6 +188,10 @@ for (x in x.vars.reg   ){
 reg.data <-  d.reg.in[ d.reg.in$ue.id %in% current.ds.ids    , c('feed_intake_g_d' ,  x.vars.reg ) ]
 reg.data.me <-  d.reg.in[ d.reg.in$ue.id %in% current.ds.ids    , c('feed_intake_g_d' ,  x.vars.reg , 'ue.id' ) ]
 pred.data <-  reg.data[  -( which( colnames(reg.data) == 'feed_intake_g_d') )  ]
+
+
+} # Generate formula/data
+
 
 # Report variance inflation factor on predictor variables
 usdm::vif(       pred.data ) 
@@ -155,32 +205,38 @@ scope.gbr <- glmboost(
 formula
 
 , data =  reg.data 
-, family = Gaussian() 
+#, family = Gaussian() 
 , control = boost_control(mstop = 5000 , nu = 0.15)
 , center = FALSE
 )
 
 
+varimp(scope.gbr) # Variable importance - this shows how much MSE is reduced by inclusion of the variable
 
+
+coef( scope.gbr) # Coefficients 
+
+
+summary(scope.gbr) # Summarize all results
+
+
+AIC( scope.gbr , method = "corrected")  # Get AIC value - for comparing models
+
+
+# Order variables according to importance
 names <-  as.vector(names(scope.gbr$coef()))
-    
-    var.imps <- as.numeric(  varimp(scope.gbr )  )
-    var.imps.ordered <- sort(var.imps, decreasing = TRUE)
-    
-    # Summarize coefficient results
-    summary(scope.gbr)
-    varimp(scope.gbr)
-    
-    
-    # Order variables according to importance
-    names[which( var.imps == var.imps.ordered[1] ) ]
-    names[which( var.imps == var.imps.ordered[2] ) ]
-    names[which( var.imps == var.imps.ordered[3] ) ]
-    names[which( var.imps == var.imps.ordered[4] ) ]
-    names[which( var.imps == var.imps.ordered[5] ) ]
-    names[which( var.imps == var.imps.ordered[6] ) ]
-    names[which( var.imps == var.imps.ordered[7] ) ]
-    names[which( var.imps == var.imps.ordered[8] ) ]
+
+var.imps <- as.numeric(  varimp(scope.gbr )  )
+var.imps.ordered <- sort(var.imps, decreasing = TRUE)
+
+names[which( var.imps == var.imps.ordered[1] ) ]
+names[which( var.imps == var.imps.ordered[2] ) ]
+names[which( var.imps == var.imps.ordered[3] ) ]
+names[which( var.imps == var.imps.ordered[4] ) ]
+names[which( var.imps == var.imps.ordered[5] ) ]
+names[which( var.imps == var.imps.ordered[6] ) ]
+names[which( var.imps == var.imps.ordered[7] ) ]
+names[which( var.imps == var.imps.ordered[8] ) ]
     
     
 }
@@ -221,31 +277,31 @@ AIC( scope.me)
 {
   
   
-
+  
   # LOW NDF
   # Bos indicus
   # MALE
-  GBR.mod.1.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg   + adg_kg_day )
-  GBR.mod.2.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg  + adg_kg_day   )
-  GBR.mod.3.bv.lo.ndf.Bind.male <- as.formula(  feed_intake_g_d  ~  bw_kg + adg_kg_day  +  adg_kg_day.sqd  )
+  GBR.mod.1.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  BW_frac_Mat  )
+  GBR.mod.2.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  BW_frac_Mat  + adg_kg_day   )
+  GBR.mod.3.bv.lo.ndf.Bind.male <- as.formula(  feed_intake_g_d  ~  BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd  )
   
-  GBR.mod.4.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day +  NDF_nutrition  )
-  GBR.mod.5.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~  bw_kg +  adg_kg_day + CP_nutrition  )
-  GBR.mod.6.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~ bw_kg +  adg_kg_day + ADF_nutrition )
+  GBR.mod.4.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~  BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd +  CP_nutrition  )
+  GBR.mod.5.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~   BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd  +  NDF_nutrition  )
+  GBR.mod.6.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d ~   BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd  + EE_nutrition )
   
-  GBR.mod.7.bv.lo.ndf.Bind.male <- as.formula(  feed_intake_g_d  ~  bw_kg +  adg_kg_day  +  NDF_nutrition + EE_nutrition    )
-  GBR.mod.8.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day  +  CP_nutrition +  EE_nutrition   )
-  GBR.mod.9.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~ bw_kg +  adg_kg_day +  ADF_nutrition + EE_nutrition )
+  GBR.mod.7.bv.lo.ndf.Bind.male <- as.formula(  feed_intake_g_d  ~   BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd +  NDF_nutrition.cbd    )
+  GBR.mod.8.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~  BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd  +  Ash_nutrition.cbd   )
+  GBR.mod.9.bv.lo.ndf.Bind.male <- as.formula(   feed_intake_g_d  ~  BW_frac_Mat  + adg_kg_day  +  adg_kg_day.sqd  +  NDF_Digest )
   
   
   # FEMALE
-  GBR.mod.1.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~ bw_kg   + adg_kg_day  +milk_prod_kg_d  )
-  GBR.mod.2.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~ bw_kg  + adg_kg_day  + milk_prod_kg_d  )
-  GBR.mod.3.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  bw_kg   + milk_prod_kg_d + adg_kg_day + adg_kg_day.sqd)
+  GBR.mod.1.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~ Met_bw_kg + BW_frac_Mat + bw_kg   + adg_kg_day  +milk_prod_kg_d  )
+  GBR.mod.2.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~ Met_bw_kg + BW_frac_Mat +bw_kg  + adg_kg_day  + milk_prod_kg_d  )
+  GBR.mod.3.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  Met_bw_kg + BW_frac_Mat +bw_kg   + milk_prod_kg_d + adg_kg_day + adg_kg_day.sqd)
   
-  GBR.mod.4.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg  + adg_kg_day +  ADF_nutrition +  milk_prod_kg_d )
-  GBR.mod.5.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg  + adg_kg_day +  CP_nutrition +  milk_prod_kg_d)
-  GBR.mod.6.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  bw_kg + adg_kg_day +   NDF_nutrition + milk_prod_kg_d)
+  GBR.mod.4.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ Met_bw_kg + BW_frac_Mat +bw_kg  + adg_kg_day +  ADF_nutrition +  milk_prod_kg_d )
+  GBR.mod.5.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  Met_bw_kg + BW_frac_Mat +bw_kg  + adg_kg_day +  CP_nutrition +  milk_prod_kg_d)
+  GBR.mod.6.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d ~  Met_bw_kg + BW_frac_Mat + bw_kg + adg_kg_day +   NDF_nutrition + milk_prod_kg_d)
   
   GBR.mod.7.bv.lo.ndf.Bind.female <- as.formula(  feed_intake_g_d  ~  bw_kg  +  adg_kg_day  +  EE_nutrition   + milk_prod_kg_d)
   GBR.mod.8.bv.lo.ndf.Bind.female <- as.formula(   feed_intake_g_d  ~ bw_kg  +  adg_kg_day  +    EE_nutrition  + milk_prod_kg_d)

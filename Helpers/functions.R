@@ -1815,7 +1815,7 @@ xtract.x.vars <<- function( formula   ){
 
 extract.ordered.vars <<- function( variable , model , mc){
   
-  # test: model <- ws.model ; mc <- 1  ; variable <- 'milk_prod_kg_d'
+  # test: model <- ws.model ; mc <- 1  ; variable <- 'NDF_nutrition'
   
   var.names <- listify.coef.names(model , mc)
   
@@ -2085,16 +2085,16 @@ gen.gg.model.label.new <<- function( breed, ndf , sex ,rank , cur.mod , mc){
   # STRATA LABEL
   
   # Breed
-  if ( breed == breed.indig){   strata.lab <- 'Bos.i'   }
+  if ( breed == breed.indig){   strata.lab <- 'Bos-i'   }
   if ( breed == breed.cbred){   strata.lab <- 'Exot'   }
   
   # Forage
-  if ( ndf == ndf.lev.lo ){   strata.lab <- str_c(  strata.lab , '-LoF' )  }
-  if ( ndf == ndf.lev.hi ){   strata.lab <- str_c(  strata.lab , '-HiF' )  }
+  if ( ndf == ndf.lev.lo ){   strata.lab <- str_c(  strata.lab , '-LoFo' )  }
+  if ( ndf == ndf.lev.hi ){   strata.lab <- str_c(  strata.lab , '-HiFo' )  }
   
   # Sex
-  if ( sex == sex.male ){   strata.lab <- str_c(  strata.lab , '-Ma:' )  }
-  if ( sex == sex.female){   strata.lab <- str_c(  strata.lab , '-Fe:' )  }
+  if ( sex == sex.male ){   strata.lab <- str_c(  strata.lab , '-Ma : ' )  }
+  if ( sex == sex.female){   strata.lab <- str_c(  strata.lab , '-Fe : ' )  }
   
   
  
@@ -2132,9 +2132,11 @@ extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars 
   
   for (  main.var in pred.vars  ) {
     
-    # test: main.var <-  pred.vars[3]
+    # test: main.var <-  pred.vars[6]
     
     ordered.var.names <- extract.ordered.vars(  main.var , model, mc)
+    
+    print(paste('running variable' ,main.var ))
     
   
     if ( main.var == pred.var.BW ) {  var.list <-  v.list.BW ; coef.se.var.list <- vns.coef.se.ws.BW  ; vif.vars <- vn.VIF.bw    ; if (sample == 'whole'){ coef.var.list <- vns.coef.ws.BW  ; sign.var.list <- vns.coef.sign.ws.BW  } else if (sample == "boot"){ coef.var.list <- vns.coef.bs.BW  }
@@ -2171,14 +2173,14 @@ extract.coefficients <<- function( data, sample , model, mc , row.cond , x.vars 
     for (  v in  2: ( length(var.list) - 2 )  ){
       
       
-      # v <- 2
+      # v <- 7
       var <-  var.list[v]
       
       # Assign VIF value
       if ( length(VIF.dat) > 1 ){
         if (  sample == 'whole' ) {  
           
-          if (  mc == model.class.GBR ) { if (var %in%   VIF.dat$Variables    ) { data[ row.cond , vif.vars[]] <-  round( VIF.dat[ VIF.dat$Variables == main.var , 'VIF' ] , rd.decs.VIF  ) }}
+          if (  mc == model.class.GBR ) { if (var %in%   VIF.dat$Variables    ) { data[ row.cond , vif.vars[]] <-  round( VIF.dat[ VIF.dat$Variables == var, 'VIF' ] , rd.decs.VIF  ) }}
           if (   mc == model.class.ME ) { if ( var %in%   names(VIF.dat)   ) { data[ row.cond , vif.vars[]] <-  round( as.numeric(VIF.dat[ main.var ]) , rd.decs.VIF  ) }}
           
         }}

@@ -92,24 +92,15 @@ print(' Creating validation plots ')
   
   gen.gg.valid <<- function( 
     dat 
-    # , xc 
-    # ,  yc
-    # , min.dmi
-    # , max.dmi 
-    #, dmi.increment
+
     
     ){
     
     # test:
     test <- function(){
       
-      dat <- gg.d.me.bv.lon.Bind.male
-      #  xc <- gg.valid.lab.x.crd.sp.lon
-      #  yc <- gg.valid.lab.male.bv.y.crd
-      
-      min.dmi <- 3.000
-      max.dmi <- 8.000
-      dmi.increment <- .500
+      dat <- gg.d.reg.out.bv.lon.Bind.male.all[gg.d.reg.out.bv.lon.Bind.male.all$mod.tier ==  tier.label.3   , ]
+
       
     }
     
@@ -119,8 +110,10 @@ print(' Creating validation plots ')
     
     modelled <- na.omit( dat[  , 'modelled' ] ) ;   observed <- na.omit(dat[  , 'observed' ] )
     
-    max.DMI <- max (   c(   modelled  ,  observed ) ) / 1000
-    min.DMI <- min (   c(   modelled  ,  observed  ) ) / 1000
+    max.DMI <- max (   c(  modelled, observed) ) / 1000
+    min.DMI <- min (   c(   modelled, observed    ) ) / 1000
+    
+    if (  min.DMI <=0) { min.DMI <- 0 }
     
     max.DMI <- round( max.DMI , 0)
     min.DMI <- round( min.DMI , 0)
@@ -168,11 +161,9 @@ print(' Creating validation plots ')
       
       geom_line(data = data.frame(x = c(-Inf, Inf), y = c(-Inf, Inf)), 
                 aes(x = x , y = y   , color = "y = x"), linetype = 'solid') + 
-      # geom_abline( aes(  x = y , y = x ,  color = 'Predicted = Observed') , linetype = "solid") +
-     
        geom_smooth(data = dat  ,  aes(x = observed /1000 , y = modelled /1000, color = 'Best fit' ), method="lm", se=FALSE , linewidth = .6 , linetype = 'solid') +
-      scale_x_continuous(breaks = seq( min.DMI, max.DMI , by = dmi.increment))  +
-      scale_y_continuous(breaks = seq( min.DMI, max.DMI , by = dmi.increment )) +
+      scale_x_continuous(breaks = seq( min.DMI, max.DMI , by = dmi.increment) , limits = c(min.DMI , max.DMI)  )  +
+      scale_y_continuous(  breaks = seq( min.DMI, max.DMI , by = dmi.increment )  , limits = c(min.DMI , max.DMI) ) +
     
     
       
@@ -372,7 +363,6 @@ print(' Creating validation plots ')
   gg.gbr.y.valid.bv.hin.Bind.male.0.tier.1 <- try( gen.gg.valid(  gg.d.reg.out.bv.hin.Bind.male.all[gg.d.reg.out.bv.hin.Bind.male.all$mod.tier == tier.label.1,] ) , silent = TRUE)
   
   gg.gbr.y.valid.bv.hin.Bind.male.0.tier.2 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Bind.male.all[gg.d.reg.out.bv.hin.Bind.male.all$mod.tier == tier.label.2,]  ) , silent = TRUE)
-  
   
   gg.gbr.y.valid.bv.hin.Bind.male.0.tier.3 <- try( gen.gg.valid(gg.d.reg.out.bv.hin.Bind.male.all[gg.d.reg.out.bv.hin.Bind.male.all$mod.tier == tier.label.3,]  ) , silent = TRUE)
   

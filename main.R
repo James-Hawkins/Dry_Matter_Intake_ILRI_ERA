@@ -648,6 +648,11 @@ reg.d.out()
 } # k-fold Cross-validation
 
 
+
+d.reg.out[d.reg.out$mod.form == 7 , ]
+
+
+
 d.reg.out$rank.among.tier
 
 d.reg.out[ is.na(d.reg.out$w.R2.ucb.ur),'ndf']
@@ -692,11 +697,11 @@ d.reg.out[
 d.reg.out$ws.coef.se.intercept
 
 
-valid.plots.out() # Produce validation (predicted vs. observed) plots
+#valid.plots.out() # Produce validation (predicted vs. observed) plots
 
-coefs.table.out() # Produce tables of regression coefficients
+#coefs.table.out() # Produce tables of regression coefficients
 
-box.fig.out()  # Generate box plot figures
+#box.fig.out()  # Generate box plot figures
 
 
 
