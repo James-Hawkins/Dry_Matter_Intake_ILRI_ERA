@@ -1,9 +1,96 @@
 
 
 
-table(reg.dat$Sample.size)
+
+cond.bov.all <-  (d.reg.in$Species == species.cattle & d.reg.in$min.data)
 
 
+
+# After outlier removing
+cond.bov.final.all <-  ( 
+  
+  cnd.bv.lo.ndf.Bind.male
+  |    cnd.bv.lo.ndf.Bind.female
+  
+  | cnd.bv.hi.ndf.Bind.male
+  |    cnd.bv.hi.ndf.Bind.female
+  
+  | cnd.bv.lo.ndf.Btau.male
+  |    cnd.bv.lo.ndf.Btau.female
+  
+  | cnd.bv.hi.ndf.Btau.male
+  |    cnd.bv.hi.ndf.Btau.female
+  
+  )
+
+
+length( unique( d.reg.in[ cond.bov.final.all,  'ue.id' ]  ))
+length( unique( d.reg.in[ cond.bov.final.all,  'ut.id' ]  ))
+
+# STRATA 2
+
+# BREED GROUPINGS
+# NUMBER OF EXPERIMENTS ( k = ...)
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.female |   cnd.bv.hi.ndf.Bind.male |  cnd.bv.lo.ndf.Bind.female |   cnd.bv.lo.ndf.Bind.male  ,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Btau.female |   cnd.bv.hi.ndf.Btau.male |  cnd.bv.lo.ndf.Btau.female |   cnd.bv.lo.ndf.Btau.male  ,  'ue.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.female |   cnd.bv.hi.ndf.Bind.male |  cnd.bv.lo.ndf.Bind.female |   cnd.bv.lo.ndf.Bind.male  ,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Btau.female |   cnd.bv.hi.ndf.Btau.male |  cnd.bv.lo.ndf.Btau.female |   cnd.bv.lo.ndf.Btau.male  ,  'ut.id' ]  ))
+
+
+# NDF GROUPINGS
+# NUMBER OF EXPERIMENTS ( k = ...)
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.female |   cnd.bv.lo.ndf.Bind.male |  cnd.bv.lo.ndf.Btau.female |  cnd.bv.lo.ndf.Btau.male ,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.female |   cnd.bv.hi.ndf.Bind.male |  cnd.bv.hi.ndf.Btau.female |  cnd.bv.hi.ndf.Btau.male ,  'ue.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.female |   cnd.bv.lo.ndf.Bind.male |  cnd.bv.lo.ndf.Btau.female |  cnd.bv.lo.ndf.Btau.male ,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.female |   cnd.bv.hi.ndf.Bind.male |  cnd.bv.hi.ndf.Btau.female |  cnd.bv.hi.ndf.Btau.male ,  'ut.id' ]  ))
+
+
+
+# SEX GROUPINGS
+# NUMBER OF EXPERIMENTS ( k = ...)
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.female |   cnd.bv.hi.ndf.Bind.female |  cnd.bv.lo.ndf.Btau.female |  cnd.bv.hi.ndf.Btau.female ,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.male |   cnd.bv.hi.ndf.Bind.male |  cnd.bv.lo.ndf.Btau.male |  cnd.bv.hi.ndf.Btau.male ,  'ue.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.female |   cnd.bv.hi.ndf.Bind.female |  cnd.bv.lo.ndf.Btau.female |  cnd.bv.hi.ndf.Btau.female ,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.male |   cnd.bv.hi.ndf.Bind.male |  cnd.bv.lo.ndf.Btau.male |  cnd.bv.hi.ndf.Btau.male ,  'ut.id' ]  ))
+
+
+length( unique( d.reg.in[    ,  'ue.id' ]  ))
+
+
+
+
+
+# STRATA 1
+# NUMBER OF EXPERIMENTS ( k = ...)
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.female,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.male,  'ue.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.female,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.male,  'ue.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Btau.female,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Btau.male,  'ue.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Btau.female,  'ue.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Btau.male,  'ue.id' ]  ))
+
+
+
+# NUMBER OF TREATMENTS ( n = ...)
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.female,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Bind.male,  'ut.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.female,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Bind.male,  'ut.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Btau.female,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.hi.ndf.Btau.male,  'ut.id' ]  ))
+
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Btau.female,  'ut.id' ]  ))
+length( unique( d.reg.in[  cnd.bv.lo.ndf.Btau.male,  'ut.id' ]  ))
 
 
 

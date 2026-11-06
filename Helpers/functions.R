@@ -189,8 +189,6 @@ gen.gg.df.specific <<- function(  cur.mod , species , breed , ndf , sex){
     mod.id <- gen.gg.model.label.new(  breed, ndf , sex ,    tier.rank, cur.mod , mc)
     
 
-    
-    
     model.label <- str_c( mod.id ) 
     
     gg.dat.fact.labl.r1.mod <- model.label 

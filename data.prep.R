@@ -248,7 +248,11 @@ d[d$Stage.harmonized !=  "lactating.adult.female" & !is.na(d$Stage.harmonized) ,
   
 d$min.data <- FALSE
 
-d[  !is.na(d$NDF_nutrition) & !is.na(d$bw_kg) & !is.na(d$adg_kg_day)   , 'min.data'] <- TRUE
+d[ 
+  !is.na(d$NDF_nutrition) 
+  & !is.na(d$bw_kg) 
+  #  & !is.na(d$adg_kg_day) 
+  , 'min.data'] <- TRUE
 
 
 

@@ -36,9 +36,9 @@ gg.x.label.cattle.hi.ndf <<- 'High NDF'
 
 
 # Labels for sample sizes
-lab.total.experiment.sample <<- 'n\u1D31'
-lab.total.treatment.sample <<- 'n\u1D40'
-lab.total.animal.sample <<- 'n\u1D2C'
+lab.total.experiment.sample <<- 'k'
+lab.total.treatment.sample <<- 'n'
+lab.total.animal.sample <<- 'N'
 
 
 ndf.lev.lo <<- 'low'
